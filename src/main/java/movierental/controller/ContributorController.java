@@ -25,6 +25,27 @@ public class ContributorController {
     public List<Contributor> getAllContributors() {
         return contributorService.getAllContributors();
     }
+    // UPDATE contributor
+    @PutMapping("/update/{id}")
+    public String updateContributor(
+            @PathVariable int id,
+            @RequestBody Contributor contributor) {
+
+        boolean updated = contributorService.updateContributor(id, contributor);
+
+        return updated ? "Contributor updated successfully"
+                : "Contributor not found";
+    }
+
+    // DELETE contributor
+    @DeleteMapping("/delete/{id}")
+    public String deleteContributor(@PathVariable int id) {
+
+        boolean deleted = contributorService.deleteContributor(id);
+
+        return deleted ? "Contributor deleted successfully"
+                : "Contributor not found";
+    }
 }
 
 
