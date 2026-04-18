@@ -1,14 +1,29 @@
 package movierental.controller;
 
+import movierental.model.Contributor;
+import movierental.service.ContributorService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-    @RestController
-    public class TestController {
+@RestController
+public class TestController {
 
-        @GetMapping("/")
-        public String home() {
-            return "Server is working!";
-        }
+    // Simple test endpoint
+    @GetMapping("/")
+    public String home() {
+        return "Server is working!";
     }
 
+    // TEMPORARY test to check file handling
+    @GetMapping("/test-add")
+    public String testAddContributor() {
+
+        ContributorService service = new ContributorService();
+
+        service.addContributor(
+                new Contributor(1, "John", "Reviewer", 25, "Sri Lanka")
+        );
+
+        return "Contributor added successfully";
+    }
+}
