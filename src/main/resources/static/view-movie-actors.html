@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Movie Actors</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Movie Cast Viewer</h1>
+
+    <p style="text-align:center; color:#cccccc;">
+        Enter a Movie ID (example: M001) to see linked actors
+    </p>
+
+    <!-- ✅ MOVIE ID INPUT FIELD -->
+    <label for="movieId">Movie ID</label>
+    <input type="text" id="movieId" placeholder="M001">
+
+    <button onclick="loadActors()">View Actors</button>
+
+    <h2>Actors</h2>
+    <ul id="actorList"></ul>
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="add-contributor.html">Add Contributor</a> |
+        <a href="view-contributors.html">View Contributors</a>
+    </div>
+
+</div>
+
+<script>
+    function loadActors() {
+        const movieId = document.getElementById("movieId").value;
+        const list = document.getElementById("actorList");
+
+        list.innerHTML = "";
+
+        if (movieId.trim() === "") {
+            list.innerHTML = "<li>Please enter a Movie ID</li>";
+            return;
+        }
+
+        fetch("/movies/" + movieId + "/actors")
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    list.innerHTML = "<li>No actors found for this movie</li>";
+                    return;
+                }
+
+                data.forEach(actor => {
+                    const item = document.createElement("li");
+                    item.innerHTML = `
+                        <b>${actor.name}</b><br>
+                        ID: ${actor.id}
+                    `;
+                    list.appendChild(item);
+                });
+            })
+            .catch(error => {
+                list.innerHTML = "<li>Error loading actors</li>";
+            });
+    }
+</script>
+
+</body>
+</html>

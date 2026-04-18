@@ -28,7 +28,7 @@ public class ContributorController {
     // UPDATE contributor
     @PutMapping("/update/{id}")
     public String updateContributor(
-            @PathVariable int id,
+            @PathVariable String id,
             @RequestBody Contributor contributor) {
 
         boolean updated = contributorService.updateContributor(id, contributor);
@@ -39,7 +39,7 @@ public class ContributorController {
 
     // DELETE contributor
     @DeleteMapping("/delete/{id}")
-    public String deleteContributor(@PathVariable int id) {
+    public String deleteContributor(@PathVariable String id) {
 
         boolean deleted = contributorService.deleteContributor(id);
 

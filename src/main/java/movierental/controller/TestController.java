@@ -21,7 +21,7 @@ public class TestController {
         ContributorService service = new ContributorService();
 
         service.addContributor(
-                new Contributor(1, "John", "Reviewer", 25, "Sri Lanka")
+                new Contributor("A001", "John", "Reviewer", 25, "Sri Lanka")
         );
 
         return "Contributor added successfully";
