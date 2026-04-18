@@ -1,1 +1,3 @@
-1,John,Reviewer,25,Sri Lanka
+A001,Leonardo DiCaprio,Actor
+A002,Joseph Gordon-Levitt,Actor
+D001,Christopher Nolan,Director
