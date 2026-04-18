@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Contributor</title>
+</head>
+<body>
+
+<h2>Add Contributor</h2>
+
+<form id="contributorForm">
+    <label>ID:</label><br>
+    <input type="number" id="id"><br><br>
+
+    <label>Name:</label><br>
+    <input type="text" id="name"><br><br>
+
+    <label>Role:</label><br>
+    <input type="text" id="role"><br><br>
+
+    <label>Age:</label><br>
+    <input type="number" id="age"><br><br>
+
+    <label>Country:</label><br>
+    <input type="text" id="country"><br><br>
+
+    <button type="button" onclick="submitContributor()">Add Contributor</button>
+</form>
+
+<p id="result"></p>
+
+<script>
+    function submitContributor() {
+        const contributor = {
+            id: document.getElementById("id").value,
+            name: document.getElementById("name").value,
+            role: document.getElementById("role").value,
+            age: document.getElementById("age").value,
+            country: document.getElementById("country").value
+        };
+
+        fetch("/contributors/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(contributor)
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("result").innerText = data;
+        });
+    }
+</script>
+
+</body>
+</html>
+``

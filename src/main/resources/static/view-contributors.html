@@ -1,0 +1,35 @@
+<!DOCTYPE>
+<html>
+<head>
+    <title>View Contributors</title>
+</head>
+<body>
+
+<h2>All Contributors</h2>
+
+<button onclick="loadContributors()">Load Contributors</button>
+
+<ul id="contributorList"></ul>
+
+<script>
+    function loadContributors() {
+        fetch("/contributors/all")
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById("contributorList");
+                list.innerHTML = "";
+
+                data.forEach(c => {
+                    const item = document.createElement("li");
+                    item.innerText =
+                        c.id + " - " + c.name + " - " +
+                        c.role + " - " + c.age + " - " +
+                        c.country;
+                    list.appendChild(item);
+                });
+            });
+    }
+</script>
+
+</body>
+</html>
