@@ -28,6 +28,8 @@
     <label>Country:</label><br>
     <input type="text" id="country"><br><br>
 
+
+
     <button type="button" onclick="submitContributor()">Add Contributor</button>
 </form>
 
@@ -40,7 +42,8 @@
             name: document.getElementById("name").value,
             role: document.getElementById("role").value,
             age: document.getElementById("age").value,
-            country: document.getElementById("country").value
+            country: document.getElementById("country").value,
+            imageUrl: document.getElementById("imageUrl").value
         };
 
         fetch("/contributors/add", {

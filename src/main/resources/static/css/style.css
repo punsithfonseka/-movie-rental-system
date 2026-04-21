@@ -1,65 +1,141 @@
-/* General page styling */body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #121212;
-    color: #f5f5f5;
+-------------------
+   Global Styles
+-------------------- */
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
     margin: 0;
-    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1c1f26, #252a34);
+    color: #f5f5f5;
 }
 
-/* Main container */
+/* -------------------
+   Container
+-------------------- */
 .container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #1e1e1e;
-    padding: 25px;
-    border-radius: 8px;
+    max-width: 520px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #1f2430;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* Headings */
-h1, h2 {
+/* -------------------
+   Headings
+-------------------- */
+h1 {
     text-align: center;
     color: #f5c518; /* IMDb yellow */
+    margin-bottom: 10px;
 }
 
-/* Labels and inputs */
+h2 {
+    margin-top: 30px;
+    color: #ffffff;
+    text-align: center;
+}
+
+/* -------------------
+   Text & Labels
+-------------------- */
+p {
+    text-align: center;
+    color: #cccccc;
+    font-size: 14px;
+}
+
 label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
     font-weight: bold;
+    color: #dddddd;
 }
 
+/* -------------------
+   Inputs
+-------------------- */
 input {
     width: 100%;
-    padding: 8px;
-    margin-top: 6px;
-    margin-bottom: 15px;
-    border-radius: 4px;
+    padding: 10px;
+    border-radius: 6px;
     border: none;
+    background: #2a2f3a;
+    color: #ffffff;
+    font-size: 14px;
 }
 
-/* Buttons */
+input:focus {
+    outline: none;
+    background: #323845;
+}
+
+/* -------------------
+   Buttons
+-------------------- */
 button {
     width: 100%;
-    padding: 10px;
-    background-color: #f5c518;
+    margin-top: 20px;
+    padding: 12px;
+    background: #f5c518;
     color: #000;
-    border: none;
-    border-radius: 5px;
+    font-size: 15px;
     font-weight: bold;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #e4b617;
+    background: #ddb515;
 }
 
-/* Lists */
+/* -------------------
+   Navigation Links
+-------------------- */
+.nav {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.nav a {
+    color: #f5c518;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 8px;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* -------------------
+   Lists
+-------------------- */
 ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
+    margin-top: 20px;
 }
 
 li {
-    background-color: #2a2a2a;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    background: #2a2f3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+/* -------------------
+   Result / Messages
+-------------------- */
+#result {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
 }

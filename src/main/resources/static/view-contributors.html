@@ -1,20 +1,29 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
     <title>View Contributors</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <div class="container">
 
     <h1>Contributor Management</h1>
 
+    <p style="text-align:center; color:#cccccc;">
+        List of registered actors and directors (IMDb-style IDs)
+    </p>
 
-    <h2>All Contributors</h2>
+    <div style="text-align:center; margin-bottom:20px;">
+        <a href="add-contributor.html">Add Contributor</a> |
+        <a href="view-contributors.html">View Contributors</a>
+    </div>
 
-<button onclick="loadContributors()">Load Contributors</button>
+    <button onclick="loadContributors()">Load Contributors</button>
 
-<ul id="contributorList"></ul>
+    <ul id="contributorList" style="margin-top:20px;"></ul>
+
+</div>
 
 <script>
     function loadContributors() {
@@ -24,17 +33,28 @@
                 const list = document.getElementById("contributorList");
                 list.innerHTML = "";
 
-                data.forEach(c => {
+                if (data.length === 0) {
+                    list.innerHTML = "<li>No contributors found</li>";
+                    return;
+                }
+
+                data.forEach(contributor => {
                     const item = document.createElement("li");
-                    item.innerText =
-                        c.id + " - " + c.name + " - " +
-                        c.role + " - " + c.age + " - " +
-                        c.country;
+
+                    item.innerHTML = `
+                        <b>${contributor.name}</b><br>
+                        ${contributor.role} | ${contributor.age} | ${contributor.country}<br>
+                        ID: ${contributor.id}
+                    `;
+
                     list.appendChild(item);
                 });
+            })
+            .catch(error => {
+                console.error(error);
             });
     }
 </script>
-</div>
+
 </body>
 </html>

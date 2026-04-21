@@ -2,7 +2,11 @@ package movierental.service;
 
 import movierental.model.Contributor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +15,7 @@ public class ContributorService {
     private static final String FILE_PATH =
             "src/main/resources/data/contributors.txt";
 
-    // CREATE
+    // ✅ CREATE
     public void addContributor(Contributor contributor) {
         try (BufferedWriter writer =
                      new BufferedWriter(new FileWriter(FILE_PATH, true))) {
@@ -30,9 +34,8 @@ public class ContributorService {
         }
     }
 
-    // READ
+    // ✅ READ
     public List<Contributor> getAllContributors() {
-
         List<Contributor> contributors = new ArrayList<>();
 
         try (BufferedReader reader =
@@ -41,18 +44,14 @@ public class ContributorService {
             String line;
 
             while ((line = reader.readLine()) != null) {
-
                 if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
 
-                // ✅ SAFETY CHECK (prevents 500 error)
-                if (data.length < 5) {
-                    continue;
-                }
+                if (data.length < 5) continue;
 
                 Contributor contributor = new Contributor(
-                        data[0],                    // ID (String)
+                        data[0],
                         data[1],
                         data[2],
                         Integer.parseInt(data[3]),
@@ -69,9 +68,8 @@ public class ContributorService {
         return contributors;
     }
 
-    // UPDATE
+    // ✅ UPDATE
     public boolean updateContributor(String id, Contributor updatedContributor) {
-
         List<Contributor> contributors = getAllContributors();
         boolean updated = false;
 
@@ -80,7 +78,6 @@ public class ContributorService {
 
             for (Contributor c : contributors) {
                 if (c.getId().equals(id)) {
-
                     writer.write(
                             updatedContributor.getId() + "," +
                                     updatedContributor.getName() + "," +
@@ -89,7 +86,6 @@ public class ContributorService {
                                     updatedContributor.getCountry()
                     );
                     updated = true;
-
                 } else {
                     writer.write(
                             c.getId() + "," +
@@ -109,9 +105,8 @@ public class ContributorService {
         return updated;
     }
 
-    // DELETE
+    // ✅ DELETE
     public boolean deleteContributor(String id) {
-
         List<Contributor> contributors = getAllContributors();
         boolean deleted = false;
 
@@ -119,7 +114,7 @@ public class ContributorService {
                      new BufferedWriter(new FileWriter(FILE_PATH))) {
 
             for (Contributor c : contributors) {
-                if (!c.getId().equals(id)) {   // ✅ KEEP others
+                if (!c.getId().equals(id)) {
                     writer.write(
                             c.getId() + "," +
                                     c.getName() + "," +

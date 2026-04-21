@@ -1,0 +1,5 @@
+admin1,1234,ADMIN
+admin2,1234,ADMIN
+admin3,1234,ADMIN
+user1,1234,USER
+user2,1234,USER
