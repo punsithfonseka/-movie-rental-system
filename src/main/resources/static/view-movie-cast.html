@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Cast Viewer</title>
+
+    <!-- ✅ Correct CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+
+<script>
+    const role = localStorage.getItem("role");
+
+    if (!role) {
+        alert("Please login first");
+        window.location.href = "login.html";
+    }
+</script>
+
+<div class="container">
+
+    <h1>Movie Cast Viewer</h1>
+
+    <p>
+        Enter a Movie ID (example: <b>M001</b>) to see linked actors
+    </p>
+
+    <!-- ✅ ROLE‑BASED NAVIGATION -->
+    <div class="nav" id="navLinks"></div>
+
+    <label for="movieId">Movie ID</label>
+    <input type="text" id="movieId" placeholder="M001">
+
+    <button onclick="loadActors()">View Actors</button>
+
+
+    <ul id="actorList"></ul>
+
+    <button onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+    /* ✅ Build nav based on role */
+    const nav = document.getElementById("navLinks");
+
+    if (role === "ADMIN") {
+        nav.innerHTML = `
+            <a href="add-contributor.htmldd-mAdd Movie</a> |
+            <a href="view-movie-cast.htmlt Viewer</a>
+        `;
+    } else if (role === "USER") {
+        nav.innerHTML = `
+            <a href="view-movie-covie Cast Viewer</a>
+        `;
+    }
+
+    /* ✅ Load movie actors */
+    function loadActors() {
+        const movieId = document.getElementById("movieId").value.trim();
+        const actorList = document.getElementById("actorList");
+
+        actorList.innerHTML = "";
+
+        if (!movieId) {
+            actorList.innerHTML = "<li>Please enter a Movie ID</li>";
+            return;
+        }
+
+        fetch(`/movies/${movieId}/actors`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length === 0) {
+                    actorList.innerHTML = "<li>No actors found</li>";
+                    return;
+                }
+
+                data.forEach(actor => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<b>${actor.name}</b><br>ID: ${actor.id}`;
+                    actorList.appendChild(li);
+                });
+            });
+    }
+
+    /* ✅ Logout */
+    function logout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

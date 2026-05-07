@@ -1,65 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Add Contributor</title>
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- ✅ Correct CSS link -->
+    <link rel="stylesheet" href="css/style.css"
 </head>
 <body>
+
+</div>
+
+<!-- ✅ Admin-only guard -->
+<script>
+    if (localStorage.getItem("role") !== "ADMIN") {
+        alert("Admins only");
+        window.location.href = "login.html";
+    }
+</script>
+
 <div class="container">
-    <h1>Contributor Management</h1>
-    <p style="text-align:center; font-size:14px; color:#cccccc;">
-        Use (A001 for Actor, D001 for Director)
-    </p>
-    <h2>Add Contributor</h2>
 
-<form id="contributorForm">
-    <label>ID:</label><br>
-    <input type="text" id="id" placeholder="A001 or D001"><br><br>
-
-    <label>Name:</label><br>
-    <input type="text" id="name"><br><br>
-
-    <label>Role:</label><br>
-    <input type="text" id="role"><br><br>
-
-    <label>Age:</label><br>
-    <input type="number" id="age"><br><br>
-
-    <label>Country:</label><br>
-    <input type="text" id="country"><br><br>
+    <h1>Add Contributor</h1>
 
 
+    <!-- ✅ ✅ FIXED NAVIGATION (REAL LINKS) -->
 
-    <button type="button" onclick="submitContributor()">Add Contributor</button>
-</form>
+    <div class="nav">
+        <a href="add-contributor.html">Add Contributor</a> |
+        <a href="add-movie.html">Add Movie</a> |
+        <a href="view-movie-cast.html">Movie Cast Viewer</a>
+    </div>
 
-<p id="result"></p>
+
+    <!-- ✅ Contributor ID -->
+    <label for="id">Contributor ID</label>
+    <input type="text" id="id" placeholder="A001 or D001">
+
+    <!-- ✅ Name -->
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Leonardo DiCaprio">
+
+    <!-- ✅ Role -->
+    <label for="role">Role</label>
+    <input type="text" id="role" placeholder="Actor or Director">
+
+    <!-- ✅ Age -->
+    <label for="age">Age</label>
+    <input type="number" id="age" placeholder="48">
+
+    <!-- ✅ Country -->
+    <label for="country">Country</label>
+    <input type="text" id="country" placeholder="USA">
+
+    <button onclick="addContributor()">Add Contributor</button>
+    <button onclick="logout()">Logout</button>
+
+    <div id="result"></div>
+
+</div>
 
 <script>
-    function submitContributor() {
+    function addContributor() {
+
         const contributor = {
-            id: document.getElementById("id").value,
-            name: document.getElementById("name").value,
-            role: document.getElementById("role").value,
+            id: document.getElementById("id").value.trim(),
+            name: document.getElementById("name").value.trim(),
+            role: document.getElementById("role").value.trim(),
             age: document.getElementById("age").value,
-            country: document.getElementById("country").value,
-            imageUrl: document.getElementById("imageUrl").value
+            country: document.getElementById("country").value.trim()
         };
+
+        if (!contributor.id || !contributor.name || !contributor.role ||
+            !contributor.age || !contributor.country) {
+            document.getElementById("result").innerText = "Please fill all fields";
+            return;
+        }
 
         fetch("/contributors/add", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(contributor)
         })
-        .then(response => response.text())
+        .then(res => res.text())
         .then(data => {
             document.getElementById("result").innerText = data;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById("result").innerText = "Error adding contributor";
         });
     }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
 </script>
-</div>
+
 </body>
 </html>
-``

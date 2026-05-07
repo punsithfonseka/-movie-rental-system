@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Movie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+<script>
+  if (localStorage.getItem("role") !== "ADMIN") {
+      alert("Admins only");
+      window.location.href = "login.html";
+  }
+</script>
+
+<div class="container">
+  <h1>Add Movie</h1>
+  <p>Admin only</p>
+
+  <div class="nav">
+    <a href="add-contributor.html">Add Contributor</a> |
+    <a href="add-movie.html">Add Movie</a> |
+  </div>
+
+  <label>Movie ID</label>
+    <input type="text" id="movieId" placeholder="M001">
+</html>
+
+<label>Title</label>
+<input type="text" id="title">
+
+<label>Actor IDs</label>
+<input type="text" id="actorIds" placeholder="A001|A002">
+
+<label>Director ID</label>
+<input type="text" id="directorIds" placeholder="D001">
+
+<button onclick="addMovie()">Add Movie</button>
+<button onclick="logout()">Logout</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+  function addMovie() {
+      const encodedActors = actorIds.value.replaceAll("|", "%7C");
+
+      fetch(`/movies/add?movieId=${movieId.value}&title=${title.value}&actorIds=${encodedActors}&directorIds=${directorIds.value}`)
+          .then(res => res.text())
+          .then(data => result.innerText = data);
+  }
+
+  function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+  }
+</script>
+

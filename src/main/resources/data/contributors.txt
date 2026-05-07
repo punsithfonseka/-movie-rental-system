@@ -8,3 +8,8 @@ D001,Christopher Nolan,Director,55,USA
 
 
 
+
+
+A001,sam,actor,48,USA
+A001,sam,director,50,USA
+A002,Leo,Actor,48,USA

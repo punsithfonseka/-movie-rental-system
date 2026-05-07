@@ -1,51 +1,59 @@
 package movierental.service;
 
-import movierental.model.Contributor;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import movierental.model.Movie;
+import java.io.*;
+import java.util.*;
 
 public class MovieService {
 
-    private static final String MOVIE_FILE = "src/main/resources/data/movies.txt";
+    private static final String FILE_PATH =
+            "src/main/resources/data/movies.txt";
 
-    private ContributorService contributorService = new ContributorService();
+    // ✅ ADD MOVIE (Admin)
+    public void addMovie(Movie movie) {
+        try (BufferedWriter writer =
+                     new BufferedWriter(new FileWriter(FILE_PATH, true))) {
 
-    // ✅ Get actors for a specific movie using movieId
-    public List<Contributor> getActorsForMovie(String movieId) {
+            writer.write(
+                    movie.getMovieId() + "," +
+                            movie.getTitle() + "," +
+                            movie.getActorIds() + "," +
+                            movie.getDirectorIds()
+            );
+            writer.newLine();
 
-        List<String> actorIds = new ArrayList<>();
-        List<Contributor> actors = new ArrayList<>();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        // 1️⃣ Read movies.txt and find the movie
-        try (BufferedReader reader = new BufferedReader(new FileReader(MOVIE_FILE))) {
+    // ✅ VIEW MOVIES
+    public List<Movie> getAllMovies() {
+        List<Movie> movies = new ArrayList<>();
+
+        try (BufferedReader reader =
+                     new BufferedReader(new FileReader(FILE_PATH))) {
+
             String line;
-
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
 
-                if (data[0].equals(movieId)) {
-                    String[] ids = data[2].split("\\|");
-                    for (String id : ids) {
-                        actorIds.add(id);
-                    }
-                    break;
-                }
+                if (data.length < 4) continue;
+
+                Movie movie = new Movie(
+                        data[0],
+                        data[1],
+                        data[2],
+                        data[3]
+                );
+
+                movies.add(movie);
             }
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // 2️⃣ Match actor IDs with contributors
-        for (Contributor contributor : contributorService.getAllContributors()) {
-            if (actorIds.contains(contributor.getId())
-                    && contributor.getRole().equalsIgnoreCase("Actor")) {
-                actors.add(contributor);
-            }
-        }
-
-        return actors;
+        return movies;
     }
 }
