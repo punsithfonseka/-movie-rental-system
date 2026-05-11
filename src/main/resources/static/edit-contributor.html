@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Edit Contributor</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
 <script>
-    // ✅ Admin only
     if (localStorage.getItem("role") !== "ADMIN") {
         alert("Admins only!");
         window.location.href = "login.html";
@@ -19,10 +19,6 @@
 
     <h1>Edit Contributor</h1>
 
-    <div class="nav">
-        <a href="contributors.html">← Back to Contributors</a>
-    </div>
-
     <!-- ✅ FORM -->
     <label>Name</label>
     <input id="name" placeholder="Enter name">
@@ -31,14 +27,13 @@
     <input id="role" placeholder="Actor or Director">
 
     <label>Age</label>
-    <input id="age" type="number" placeholder="Age">
+    <input id="age" type="number">
 
     <label>Country</label>
-    <input id="country" placeholder="Country">
+    <input id="country">
 
     <button onclick="updateContributor()">Update Contributor</button>
-
-    <button onclick="goBack()">Back</button>
+    <button onclick="logout()">Logout</button>
 
     <div id="result"></div>
 
@@ -49,7 +44,7 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    // ✅ LOAD DATA INTO FORM
+    // ✅ LOAD DATA
     function loadContributor() {
 
         fetch("/contributors/all")
@@ -67,9 +62,6 @@
                 document.getElementById("role").value = c.role;
                 document.getElementById("age").value = c.age;
                 document.getElementById("country").value = c.country;
-            })
-            .catch(() => {
-                document.getElementById("result").innerText = "Error loading contributor";
             });
     }
 
@@ -90,16 +82,11 @@
         })
         .then(res => res.text())
         .then(msg => {
-            document.getElementById("result").innerText = msg;
-        })
-        .catch(() => {
-            document.getElementById("result").innerText = "Update failed";
-        });
-    }
+            alert(msg);
 
-    // ✅ BACK BUTTON
-    function goBack() {
-        window.location.href = "contributors.html";
+            // ✅ AUTO RETURN AFTER UPDATE (VERY IMPORTANT)
+            window.location.href = "contributors.html";
+        });
     }
 
     // ✅ LOAD PAGE
@@ -109,4 +96,3 @@
 
 </body>
 </html>
-``

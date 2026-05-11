@@ -15,9 +15,8 @@
 
 body {
     height: 100vh;
-    margin: 0;
 
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
                 url("/images/bg.jpg");
 
     background-size: cover;
@@ -28,7 +27,7 @@ body {
 }
 
 /* ================================================= */
-/* CONTAINER (GLASS EFFECT) */
+/* CONTAINER */
 /* ================================================= */
 
 .container {
@@ -36,7 +35,7 @@ body {
     margin: 80px auto;
     padding: 35px;
 
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 
@@ -46,7 +45,7 @@ body {
         0 25px 50px rgba(0, 0, 0, 0.65),
         inset 0 0 0 1px rgba(255,255,255,0.08);
 
-    animation: fadeIn 0.6s ease;
+    animation: fadeIn 0.5s ease;
 }
 
 /* ================================================= */
@@ -56,40 +55,25 @@ body {
 h1, h2 {
     text-align: center;
     color: #f5c518;
-    margin-bottom: 15px;
-
-    text-shadow: 0 4px 18px rgba(245,197,24,0.4);
+    margin-bottom: 18px;
+    text-shadow: 0 4px 20px rgba(245,197,24,0.5);
 }
 
 /* ================================================= */
-/* NAV */
+/* INPUTS */
 /* ================================================= */
 
-.nav {
-    text-align: center;
-    margin-bottom: 25px;
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
 }
-
-.nav a {
-    color: #b49cff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.nav a:hover {
-    color: #f5c518;
-}
-
-/* ================================================= */
-/* INPUTS & SELECT */
-/* ================================================= */
 
 input, select {
     width: 100%;
     padding: 14px;
-    margin: 10px 0 20px;
+    margin-top: 6px;
+    margin-bottom: 18px;
 
     border-radius: 12px;
     border: none;
@@ -105,7 +89,7 @@ input, select {
 /* focus glow */
 input:focus, select:focus {
     outline: none;
-    box-shadow: 0 0 10px rgba(245,197,24,0.6);
+    box-shadow: 0 0 8px rgba(245,197,24,0.6);
 }
 
 /* multi select */
@@ -114,12 +98,12 @@ select[multiple] {
 }
 
 /* ================================================= */
-/* BUTTONS */
+/* MAIN BUTTONS */
 /* ================================================= */
 
 button {
     width: 100%;
-    margin-top: 15px;
+    margin-top: 12px;
     padding: 15px;
 
     border-radius: 40px;
@@ -136,27 +120,47 @@ button {
 
 button:hover {
     transform: scale(1.03);
-    box-shadow: 0 20px 35px rgba(245,197,24,0.6);
+    box-shadow: 0 10px 25px rgba(245,197,24,0.6);
 }
 
-/* secondary button */
+/* secondary button (logout/back) */
 button:last-of-type {
-    background: #666;
+    background: #555;
     color: white;
 }
 
 button:last-of-type:hover {
-    background: #444;
+    background: #333;
 }
 
 /* ================================================= */
-/* CARDS (CONTRIBUTORS) */
+/* BACK/NEXT NAV BUTTONS */
+/* ================================================= */
+
+/* ✅ SMALLER NAV BUTTONS */
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+/* smaller buttons */
+.nav-buttons button {
+    width: 120px;          /* 👈 small size */
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 25px;
+}
+
+
+/* ================================================= */
+/* CONTRIBUTOR CARDS */
 /* ================================================= */
 
 ul {
     list-style: none;
     margin-top: 25px;
-    padding: 0;
 }
 
 li {
@@ -173,19 +177,19 @@ li {
     transition: 0.2s ease;
 }
 
-/* hover card */
+/* hover lift */
 li:hover {
     transform: translateY(-3px);
 }
 
-/* NAME STYLE */
+/* name */
 li b {
     font-size: 18px;
     color: #f5c518;
 }
 
 /* ================================================= */
-/* INLINE BUTTONS (EDIT / DELETE) */
+/* INLINE BUTTONS */
 /* ================================================= */
 
 li button {
@@ -193,24 +197,23 @@ li button {
     padding: 6px 12px;
     margin-top: 10px;
     margin-right: 8px;
-
     border-radius: 20px;
 }
 
-/* EDIT BUTTON */
+/* edit button */
 li button:nth-child(5) {
     background: #4caf50;
     color: white;
 }
 
-/* DELETE BUTTON */
+/* delete button */
 li button:nth-child(6) {
     background: #ff4c4c;
     color: white;
 }
 
 /* ================================================= */
-/* BADGE (OPTIONAL) */
+/* BADGE */
 /* ================================================= */
 
 .badge {
@@ -231,13 +234,13 @@ hr {
 }
 
 /* ================================================= */
-/* ANIMATIONS */
+/* ANIMATION */
 /* ================================================= */
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;

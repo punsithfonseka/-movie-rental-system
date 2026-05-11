@@ -2,12 +2,13 @@
 <html>
 <head>
   <title>Add Movie</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
 <script>
+  // ✅ ADMIN GUARD
   if (localStorage.getItem("role") !== "ADMIN") {
       alert("Admins only");
       window.location.href = "login.html";
@@ -19,10 +20,10 @@
   <h1>Add Movie</h1>
   <p>Admin only</p>
 
-  <div class="nav">
-    <a href="add-contributor.html">Add Contributor</a> |
-    <a href="add-movie.html">Add Movie</a> |
-    <a href="view-movie-cast.html">Movie Cast Viewer</a>
+  <!-- ✅ SIMPLE NAV -->
+  <div class="nav-buttons">
+    <button onclick="goBack()">Back</button>
+    <button onclick="goNext()">Next</button>
   </div>
 
   <!-- ✅ TITLE -->
@@ -46,9 +47,19 @@
 
 <script>
 
+  // ✅ NAVIGATION
+  function goBack() {
+      window.location.href = "add-contributor.html";
+  }
+
+  function goNext() {
+      window.location.href = "contributors.html";
+  }
+
+
+  // ✅ LOAD CONTRIBUTORS
   document.addEventListener("DOMContentLoaded", loadContributors);
 
-  // ✅ Load contributors into dropdown
   function loadContributors() {
 
       fetch("/contributors/all")
@@ -61,64 +72,51 @@
               actorSelect.innerHTML = "";
               directorSelect.innerHTML = "";
 
-              let actorCount = 0;
-              let directorCount = 0;
-
+              // ✅ Populate dropdowns
               data.forEach(c => {
 
                   if (c.role === "Actor") {
-                      actorSelect.innerHTML += `<option value="${c.id}">
-                          ${c.name}
-                      </option>`;
-                      actorCount++;
+                      actorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
                   }
 
                   if (c.role === "Director") {
-                      directorSelect.innerHTML += `<option value="${c.id}">
-                          ${c.name}
-                      </option>`;
-                      directorCount++;
+                      directorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
                   }
               });
-
-              // ✅ If no data (nice UX)
-              if (actorCount === 0) {
-                  actorSelect.innerHTML = "<option disabled>No actors available</option>";
-              }
-
-              if (directorCount === 0) {
-                  directorSelect.innerHTML = "<option disabled>No directors available</option>";
-              }
-
           })
-          .catch(err => {
-              console.error("Error loading contributors:", err);
+          .catch(() => {
+              console.error("Error loading contributors");
           });
   }
 
-  // ✅ ADD MOVIE
+
+  // ✅ ADD MOVIE (FIXED ✅)
   function addMovie() {
 
       const title = document.getElementById("title").value.trim();
       const actorSelect = document.getElementById("actors");
       const directorId = document.getElementById("director").value;
 
-      // ✅ Get selected actors
       const selectedActors = Array.from(actorSelect.selectedOptions)
           .map(opt => opt.value)
           .join("|");
 
-      if (!title || !selectedActors || !directorId) {
+      // ✅ FIXED validation
+      if (!title || selectedActors.length === 0 || !directorId) {
           document.getElementById("result").innerText = "Please fill all fields";
           return;
       }
 
-      fetch(`/movies/add?title=${title}&actorIds=${selectedActors}&directorIds=${directorId}`)
+      // ✅ DEBUG (optional)
+      console.log(title, selectedActors, directorId);
+
+      // ✅ FIXED REQUEST (IMPORTANT ✅)
+      fetch(`/movies/add?title=${encodeURIComponent(title)}&actorIds=${encodeURIComponent(selectedActors)}&directorIds=${encodeURIComponent(directorId)}`)
           .then(res => res.text())
           .then(data => {
               document.getElementById("result").innerText = data;
 
-              // ✅ Reset form (better UX)
+              // ✅ RESET
               document.getElementById("title").value = "";
               actorSelect.selectedIndex = -1;
               document.getElementById("director").selectedIndex = 0;
@@ -127,6 +125,7 @@
               document.getElementById("result").innerText = "Error adding movie";
           });
   }
+
 
   // ✅ LOGOUT
   function logout() {

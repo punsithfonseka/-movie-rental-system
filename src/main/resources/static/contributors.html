@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Contributor Profiles</title>
-  <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -10,6 +8,7 @@
 <script>
   // ✅ Admin only access
   if (localStorage.getItem("role") !== "ADMIN") {
+      console.log("ROLE:", localStorage.getItem("role"));
       alert("Admins only!");
       window.location.href = "login.html";
   }
@@ -19,13 +18,12 @@
 
   <h1>Contributor Profiles</h1>
 
-  <div class="nav">
-    <a href="add-contributor.html">Add Contributor</a> |
-    <a href="add-movie.html">Add Movie</a> |
-    <a href="contributors.html">Contributors</a>
+  <!-- ✅ BACK BUTTON ONLY -->
+  <div class="nav-buttons">
+    <button onclick="goBack()">Back</button>
   </div>
 
-  <!-- ✅ ONLY LIST (NO EDIT FORM HERE) -->
+  <!-- ✅ LOAD BUTTON -->
   <button onclick="loadContributors()">Load Contributors</button>
 
   <ul id="list"></ul>
@@ -33,6 +31,12 @@
 </div>
 
 <script>
+
+  // ✅ BACK NAVIGATION
+  function goBack() {
+      window.location.href = "add-movie.html";
+  }
+
 
   // ✅ LOAD CONTRIBUTORS
   function loadContributors() {
@@ -79,13 +83,14 @@
   }
 
 
-  // ✅ ✅ NAVIGATE TO EDIT PAGE
+  // ✅ GO TO EDIT
   function goEdit(id) {
-      window.location.href = `edit-contributor.html?id=${id}`;
+      window.location.href = `add-contributor.html?id=${id}`;
   }
 
 </script>
 
 </body>
 </html>
-``
+
+<head>

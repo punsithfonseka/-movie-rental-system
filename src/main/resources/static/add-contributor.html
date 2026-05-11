@@ -9,8 +9,8 @@
 
 <body>
 
-<!-- ✅ ADMIN GUARD -->
 <script>
+    // ✅ ADMIN GUARD
     if (localStorage.getItem("role") !== "ADMIN") {
         alert("Admins only");
         window.location.href = "login.html";
@@ -20,14 +20,6 @@
 <div class="container">
 
     <h1 id="title">Add Contributor</h1>
-
-    <!-- ✅ UPDATED NAVIGATION -->
-    <div class="nav">
-        <a href="add-contributor.html">Add Contributor</a> |
-        <a href="add-movie.html">Add Movie</a> |
-        <a id="castLink" href="view-movie-cast.html">Movie Cast Viewer</a> |
-        <a href="contributors.html">Contributors</a>
-    </div>
 
     <!-- ✅ FORM -->
     <label>Name</label>
@@ -51,27 +43,32 @@
 
     <div id="result"></div>
 
+    <!-- ✅ ✅ SMALL ICON NAV (BOTTOM) -->
+    <div class="bottom-nav">
+        <button onclick="goBack()">⬅</button>
+        <button onclick="goNext()">➡</button>
+    </div>
+
 </div>
 
 <script>
 
-    // ✅ ROLE CHECK FOR NAVIGATION
-    const role = localStorage.getItem("role");
+    // ✅ NAVIGATION
+    function goBack() {
+        window.location.href = "login.html";
+    }
 
-    // ✅ Hide Movie Cast Viewer for Admin
-    if (role === "ADMIN") {
-        const castLink = document.getElementById("castLink");
-        if (castLink) castLink.style.display = "none";
+    function goNext() {
+        window.location.href = "add-movie.html";
     }
 
 
-    // ✅ CHECK IF EDIT MODE
+    // ✅ CHECK EDIT MODE
     const params = new URLSearchParams(window.location.search);
     const editId = params.get("id");
     const isEditMode = editId !== null;
 
-
-    // ✅ LOAD DATA IF EDIT MODE
+    // ✅ LOAD DATA (EDIT MODE)
     function loadContributor() {
 
         if (!isEditMode) return;
@@ -89,7 +86,6 @@
                 document.getElementById("age").value = c.age;
                 document.getElementById("country").value = c.country;
 
-                // ✅ Change UI
                 document.getElementById("title").innerText = "Edit Contributor";
                 document.getElementById("actionBtn").innerText = "Update Contributor";
             });
@@ -98,7 +94,7 @@
     loadContributor();
 
 
-    // ✅ ADD / UPDATE FUNCTION
+    // ✅ ADD / UPDATE
     function handleSubmit() {
 
         const contributor = {
@@ -114,7 +110,6 @@
             return;
         }
 
-        // ✅ EDIT MODE
         if (isEditMode) {
 
             fetch(`/contributors/update/${editId}`, {
@@ -130,7 +125,6 @@
 
         } else {
 
-            // ✅ ADD MODE
             fetch("/contributors/add", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -138,9 +132,9 @@
             })
             .then(res => res.text())
             .then(msg => {
+
                 document.getElementById("result").innerText = msg;
 
-                // ✅ Clear form
                 document.getElementById("name").value = "";
                 document.getElementById("role").value = "";
                 document.getElementById("age").value = "";

@@ -1,4 +1,4 @@
-A002,Joseph Gordon-Levitt,Actor,45,America
 D001,Christopher Nolan,Director,55,USA
 A003,John Doe,Actor,50,SL
 A005,Leo,Actor,48,usa
+A005,John Doe,Actor,50,sl
