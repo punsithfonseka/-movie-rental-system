@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Add Contributor</title>
 
-    <!-- ✅ FIXED CSS LINK -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-<!-- ✅ Admin-only guard -->
+<!-- ✅ ADMIN GUARD -->
 <script>
     if (localStorage.getItem("role") !== "ADMIN") {
         alert("Admins only");
@@ -19,22 +19,20 @@
 
 <div class="container">
 
-    <h1>Add Contributor</h1>
+    <h1 id="title">Add Contributor</h1>
 
-    <!-- ✅ Navigation -->
+    <!-- ✅ UPDATED NAVIGATION -->
     <div class="nav">
         <a href="add-contributor.html">Add Contributor</a> |
         <a href="add-movie.html">Add Movie</a> |
-        <a href="view-movie-cast.html">Movie Cast Viewer</a>
+        <a id="castLink" href="view-movie-cast.html">Movie Cast Viewer</a> |
+        <a href="contributors.html">Contributors</a>
     </div>
 
-    <!-- ❌ REMOVED ID FIELD (AUTO GENERATED) -->
-
-    <!-- ✅ Name -->
+    <!-- ✅ FORM -->
     <label>Name</label>
     <input type="text" id="name" placeholder="Leonardo DiCaprio">
 
-    <!-- ✅ Role (dropdown is safer ✅) -->
     <label>Role</label>
     <select id="role">
         <option value="">Select Role</option>
@@ -42,15 +40,13 @@
         <option value="Director">Director</option>
     </select>
 
-    <!-- ✅ Age -->
     <label>Age</label>
     <input type="number" id="age" placeholder="48">
 
-    <!-- ✅ Country -->
     <label>Country</label>
     <input type="text" id="country" placeholder="USA">
 
-    <button onclick="addContributor()">Add Contributor</button>
+    <button id="actionBtn" onclick="handleSubmit()">Add Contributor</button>
     <button onclick="logout()">Logout</button>
 
     <div id="result"></div>
@@ -58,48 +54,108 @@
 </div>
 
 <script>
-    function addContributor() {
+
+    // ✅ ROLE CHECK FOR NAVIGATION
+    const role = localStorage.getItem("role");
+
+    // ✅ Hide Movie Cast Viewer for Admin
+    if (role === "ADMIN") {
+        const castLink = document.getElementById("castLink");
+        if (castLink) castLink.style.display = "none";
+    }
+
+
+    // ✅ CHECK IF EDIT MODE
+    const params = new URLSearchParams(window.location.search);
+    const editId = params.get("id");
+    const isEditMode = editId !== null;
+
+
+    // ✅ LOAD DATA IF EDIT MODE
+    function loadContributor() {
+
+        if (!isEditMode) return;
+
+        fetch("/contributors/all")
+            .then(res => res.json())
+            .then(data => {
+
+                const c = data.find(x => x.id === editId);
+
+                if (!c) return;
+
+                document.getElementById("name").value = c.name;
+                document.getElementById("role").value = c.role;
+                document.getElementById("age").value = c.age;
+                document.getElementById("country").value = c.country;
+
+                // ✅ Change UI
+                document.getElementById("title").innerText = "Edit Contributor";
+                document.getElementById("actionBtn").innerText = "Update Contributor";
+            });
+    }
+
+    loadContributor();
+
+
+    // ✅ ADD / UPDATE FUNCTION
+    function handleSubmit() {
 
         const contributor = {
-            // ❌ NO ID FIELD → backend generates it
             name: document.getElementById("name").value.trim(),
             role: document.getElementById("role").value.trim(),
             age: document.getElementById("age").value,
             country: document.getElementById("country").value.trim()
         };
 
-        // ✅ Validation
         if (!contributor.name || !contributor.role ||
             !contributor.age || !contributor.country) {
             document.getElementById("result").innerText = "Please fill all fields";
             return;
         }
 
-        fetch("/contributors/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(contributor)
-        })
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("result").innerText = data;
+        // ✅ EDIT MODE
+        if (isEditMode) {
 
-            // ✅ Clear inputs after success (nice UX)
-            document.getElementById("name").value = "";
-            document.getElementById("role").value = "";
-            document.getElementById("age").value = "";
-            document.getElementById("country").value = "";
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById("result").innerText = "Error adding contributor";
-        });
+            fetch(`/contributors/update/${editId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(contributor)
+            })
+            .then(res => res.text())
+            .then(msg => {
+                alert(msg);
+                window.location.href = "contributors.html";
+            });
+
+        } else {
+
+            // ✅ ADD MODE
+            fetch("/contributors/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(contributor)
+            })
+            .then(res => res.text())
+            .then(msg => {
+                document.getElementById("result").innerText = msg;
+
+                // ✅ Clear form
+                document.getElementById("name").value = "";
+                document.getElementById("role").value = "";
+                document.getElementById("age").value = "";
+                document.getElementById("country").value = "";
+            });
+        }
     }
 
+
+    // ✅ LOGOUT
     function logout() {
         localStorage.clear();
         window.location.href = "login.html";
     }
+
 </script>
 
 </body>

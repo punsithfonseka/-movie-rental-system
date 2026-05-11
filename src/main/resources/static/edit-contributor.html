@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Contributor</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<script>
+    // ✅ Admin only
+    if (localStorage.getItem("role") !== "ADMIN") {
+        alert("Admins only!");
+        window.location.href = "login.html";
+    }
+</script>
+
+<div class="container">
+
+    <h1>Edit Contributor</h1>
+
+    <div class="nav">
+        <a href="contributors.html">← Back to Contributors</a>
+    </div>
+
+    <!-- ✅ FORM -->
+    <label>Name</label>
+    <input id="name" placeholder="Enter name">
+
+    <label>Role</label>
+    <input id="role" placeholder="Actor or Director">
+
+    <label>Age</label>
+    <input id="age" type="number" placeholder="Age">
+
+    <label>Country</label>
+    <input id="country" placeholder="Country">
+
+    <button onclick="updateContributor()">Update Contributor</button>
+
+    <button onclick="goBack()">Back</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    // ✅ LOAD DATA INTO FORM
+    function loadContributor() {
+
+        fetch("/contributors/all")
+            .then(res => res.json())
+            .then(data => {
+
+                const c = data.find(x => x.id === id);
+
+                if (!c) {
+                    document.getElementById("result").innerText = "Contributor not found";
+                    return;
+                }
+
+                document.getElementById("name").value = c.name;
+                document.getElementById("role").value = c.role;
+                document.getElementById("age").value = c.age;
+                document.getElementById("country").value = c.country;
+            })
+            .catch(() => {
+                document.getElementById("result").innerText = "Error loading contributor";
+            });
+    }
+
+    // ✅ UPDATE
+    function updateContributor() {
+
+        const updated = {
+            name: document.getElementById("name").value,
+            role: document.getElementById("role").value,
+            age: document.getElementById("age").value,
+            country: document.getElementById("country").value
+        };
+
+        fetch(`/contributors/update/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updated)
+        })
+        .then(res => res.text())
+        .then(msg => {
+            document.getElementById("result").innerText = msg;
+        })
+        .catch(() => {
+            document.getElementById("result").innerText = "Update failed";
+        });
+    }
+
+    // ✅ BACK BUTTON
+    function goBack() {
+        window.location.href = "contributors.html";
+    }
+
+    // ✅ LOAD PAGE
+    loadContributor();
+
+</script>
+
+</body>
+</html>
+``
