@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <title>Add Contributor</title>
 
-    <!-- ✅ Correct CSS link -->
-    <link rel="stylesheet" href="css/style.css"
+    <!-- ✅ FIXED CSS LINK -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-
-</div>
 
 <!-- ✅ Admin-only guard -->
 <script>
@@ -23,34 +21,33 @@
 
     <h1>Add Contributor</h1>
 
-
-    <!-- ✅ ✅ FIXED NAVIGATION (REAL LINKS) -->
-
+    <!-- ✅ Navigation -->
     <div class="nav">
         <a href="add-contributor.html">Add Contributor</a> |
         <a href="add-movie.html">Add Movie</a> |
         <a href="view-movie-cast.html">Movie Cast Viewer</a>
     </div>
 
-
-    <!-- ✅ Contributor ID -->
-    <label for="id">Contributor ID</label>
-    <input type="text" id="id" placeholder="A001 or D001">
+    <!-- ❌ REMOVED ID FIELD (AUTO GENERATED) -->
 
     <!-- ✅ Name -->
-    <label for="name">Name</label>
+    <label>Name</label>
     <input type="text" id="name" placeholder="Leonardo DiCaprio">
 
-    <!-- ✅ Role -->
-    <label for="role">Role</label>
-    <input type="text" id="role" placeholder="Actor or Director">
+    <!-- ✅ Role (dropdown is safer ✅) -->
+    <label>Role</label>
+    <select id="role">
+        <option value="">Select Role</option>
+        <option value="Actor">Actor</option>
+        <option value="Director">Director</option>
+    </select>
 
     <!-- ✅ Age -->
-    <label for="age">Age</label>
+    <label>Age</label>
     <input type="number" id="age" placeholder="48">
 
     <!-- ✅ Country -->
-    <label for="country">Country</label>
+    <label>Country</label>
     <input type="text" id="country" placeholder="USA">
 
     <button onclick="addContributor()">Add Contributor</button>
@@ -64,14 +61,15 @@
     function addContributor() {
 
         const contributor = {
-            id: document.getElementById("id").value.trim(),
+            // ❌ NO ID FIELD → backend generates it
             name: document.getElementById("name").value.trim(),
             role: document.getElementById("role").value.trim(),
             age: document.getElementById("age").value,
             country: document.getElementById("country").value.trim()
         };
 
-        if (!contributor.id || !contributor.name || !contributor.role ||
+        // ✅ Validation
+        if (!contributor.name || !contributor.role ||
             !contributor.age || !contributor.country) {
             document.getElementById("result").innerText = "Please fill all fields";
             return;
@@ -85,6 +83,12 @@
         .then(res => res.text())
         .then(data => {
             document.getElementById("result").innerText = data;
+
+            // ✅ Clear inputs after success (nice UX)
+            document.getElementById("name").value = "";
+            document.getElementById("role").value = "";
+            document.getElementById("age").value = "";
+            document.getElementById("country").value = "";
         })
         .catch(err => {
             console.error(err);

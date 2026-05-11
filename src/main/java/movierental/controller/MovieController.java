@@ -16,14 +16,15 @@ public class MovieController {
     private MovieService movieService = new MovieService();
     private ContributorService contributorService = new ContributorService();
 
-    // ✅ ADD MOVIE
+    // ✅ ✅ UPDATED: ADD MOVIE (NO movieId from user)
     @GetMapping("/add")
-    public String addMovie(@RequestParam String movieId,
-                           @RequestParam String title,
+    public String addMovie(@RequestParam String title,
                            @RequestParam String actorIds,
                            @RequestParam String directorIds) {
 
-        Movie movie = new Movie(movieId, title, actorIds, directorIds);
+        // ✅ movieId will be generated automatically in service
+        Movie movie = new Movie(null, title, actorIds, directorIds);
+
         movieService.addMovie(movie);
 
         return "Movie added successfully";
@@ -42,7 +43,6 @@ public class MovieController {
         List<Movie> movies = movieService.getAllMovies();
 
         for (Movie m : movies) {
-            // ✅ flexible search
             if (m.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 return m;
             }
@@ -51,7 +51,7 @@ public class MovieController {
         return null;
     }
 
-    // ✅ ✅ FINAL: GET ALL CONTRIBUTORS (Actors + Directors)
+    // ✅ GET ALL CONTRIBUTORS (Actors + Directors)
     @GetMapping("/{movieId}/contributors")
     public List<Contributor> getContributorsForMovie(@PathVariable String movieId) {
 
@@ -60,11 +60,11 @@ public class MovieController {
 
         String allIds = "";
 
-        // ✅ Find the movie
+        // ✅ Find movie
         for (Movie m : movies) {
             if (m.getMovieId().equals(movieId)) {
 
-                // ✅ Combine actor + director IDs
+                // ✅ Combine actors + directors
                 allIds = m.getActorIds() + "|" + m.getDirectorIds();
                 break;
             }
@@ -74,13 +74,12 @@ public class MovieController {
             return result;
         }
 
-        // ✅ Split IDs (supports | , space)
+        // ✅ Split IDs (handles | , space)
         String[] ids = allIds.split("[,| ]+");
 
-        // ✅ Match contributors (NO role filter)
+        // ✅ Match contributors
         for (Contributor c : contributorService.getAllContributors()) {
             for (String id : ids) {
-
                 if (c.getId().equals(id.trim())) {
                     result.add(c);
                 }

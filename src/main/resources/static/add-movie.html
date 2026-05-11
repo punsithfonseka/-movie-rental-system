@@ -4,9 +4,8 @@
   <title>Add Movie</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-
-
 
 <script>
   if (localStorage.getItem("role") !== "ADMIN") {
@@ -16,45 +15,127 @@
 </script>
 
 <div class="container">
+
   <h1>Add Movie</h1>
   <p>Admin only</p>
 
   <div class="nav">
     <a href="add-contributor.html">Add Contributor</a> |
     <a href="add-movie.html">Add Movie</a> |
+    <a href="view-movie-cast.html">Movie Cast Viewer</a>
   </div>
 
-  <label>Movie ID</label>
-    <input type="text" id="movieId" placeholder="M001">
-</html>
+  <!-- ✅ TITLE -->
+  <label>Title</label>
+  <input type="text" id="title" placeholder="Inception">
 
-<label>Title</label>
-<input type="text" id="title">
+  <!-- ✅ ACTORS -->
+  <label>Actors (Hold Ctrl to select multiple)</label>
+  <select id="actors" multiple></select>
 
-<label>Actor IDs</label>
-<input type="text" id="actorIds" placeholder="A001|A002">
+  <!-- ✅ DIRECTOR -->
+  <label>Director</label>
+  <select id="director"></select>
 
-<label>Director ID</label>
-<input type="text" id="directorIds" placeholder="D001">
+  <button onclick="addMovie()">Add Movie</button>
+  <button onclick="logout()">Logout</button>
 
-<button onclick="addMovie()">Add Movie</button>
-<button onclick="logout()">Logout</button>
+  <div id="result"></div>
 
-<div id="result"></div>
 </div>
 
 <script>
-  function addMovie() {
-      const encodedActors = actorIds.value.replaceAll("|", "%7C");
 
-      fetch(`/movies/add?movieId=${movieId.value}&title=${title.value}&actorIds=${encodedActors}&directorIds=${directorIds.value}`)
-          .then(res => res.text())
-          .then(data => result.innerText = data);
+  document.addEventListener("DOMContentLoaded", loadContributors);
+
+  // ✅ Load contributors into dropdown
+  function loadContributors() {
+
+      fetch("/contributors/all")
+          .then(res => res.json())
+          .then(data => {
+
+              const actorSelect = document.getElementById("actors");
+              const directorSelect = document.getElementById("director");
+
+              actorSelect.innerHTML = "";
+              directorSelect.innerHTML = "";
+
+              let actorCount = 0;
+              let directorCount = 0;
+
+              data.forEach(c => {
+
+                  if (c.role === "Actor") {
+                      actorSelect.innerHTML += `<option value="${c.id}">
+                          ${c.name}
+                      </option>`;
+                      actorCount++;
+                  }
+
+                  if (c.role === "Director") {
+                      directorSelect.innerHTML += `<option value="${c.id}">
+                          ${c.name}
+                      </option>`;
+                      directorCount++;
+                  }
+              });
+
+              // ✅ If no data (nice UX)
+              if (actorCount === 0) {
+                  actorSelect.innerHTML = "<option disabled>No actors available</option>";
+              }
+
+              if (directorCount === 0) {
+                  directorSelect.innerHTML = "<option disabled>No directors available</option>";
+              }
+
+          })
+          .catch(err => {
+              console.error("Error loading contributors:", err);
+          });
   }
 
+  // ✅ ADD MOVIE
+  function addMovie() {
+
+      const title = document.getElementById("title").value.trim();
+      const actorSelect = document.getElementById("actors");
+      const directorId = document.getElementById("director").value;
+
+      // ✅ Get selected actors
+      const selectedActors = Array.from(actorSelect.selectedOptions)
+          .map(opt => opt.value)
+          .join("|");
+
+      if (!title || !selectedActors || !directorId) {
+          document.getElementById("result").innerText = "Please fill all fields";
+          return;
+      }
+
+      fetch(`/movies/add?title=${title}&actorIds=${selectedActors}&directorIds=${directorId}`)
+          .then(res => res.text())
+          .then(data => {
+              document.getElementById("result").innerText = data;
+
+              // ✅ Reset form (better UX)
+              document.getElementById("title").value = "";
+              actorSelect.selectedIndex = -1;
+              document.getElementById("director").selectedIndex = 0;
+          })
+          .catch(() => {
+              document.getElementById("result").innerText = "Error adding movie";
+          });
+  }
+
+  // ✅ LOGOUT
   function logout() {
       localStorage.clear();
       window.location.href = "login.html";
   }
+
 </script>
 
+</body>
+</html>
+``

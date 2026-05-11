@@ -2,11 +2,7 @@ package movierental.service;
 
 import movierental.model.Contributor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +11,33 @@ public class ContributorService {
     private static final String FILE_PATH =
             "src/main/resources/data/contributors.txt";
 
-    // ✅ CREATE
+    // ✅ ✅ AUTO ID GENERATOR
+    private String generateContributorId(String role) {
+
+        List<Contributor> list = getAllContributors();
+
+        int count = list.size() + 1;
+
+        String number = String.format("%03d", count);
+
+        if (role.equalsIgnoreCase("Actor")) {
+            return "A" + number;
+        } else if (role.equalsIgnoreCase("Director")) {
+            return "D" + number;
+        } else {
+            return "C" + number;
+        }
+    }
+
+    // ✅ CREATE (UPDATED WITH AUTO ID)
     public void addContributor(Contributor contributor) {
+
         try (BufferedWriter writer =
                      new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+
+            // ✅ Assign auto ID
+            String autoId = generateContributorId(contributor.getRole());
+            contributor.setId(autoId);
 
             writer.write(
                     contributor.getId() + "," +
@@ -27,6 +46,7 @@ public class ContributorService {
                             contributor.getAge() + "," +
                             contributor.getCountry()
             );
+
             writer.newLine();
 
         } catch (IOException e) {
@@ -36,6 +56,7 @@ public class ContributorService {
 
     // ✅ READ
     public List<Contributor> getAllContributors() {
+
         List<Contributor> contributors = new ArrayList<>();
 
         try (BufferedReader reader =
@@ -44,6 +65,7 @@ public class ContributorService {
             String line;
 
             while ((line = reader.readLine()) != null) {
+
                 if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
@@ -68,8 +90,9 @@ public class ContributorService {
         return contributors;
     }
 
-    // ✅ UPDATE
+    // ✅ UPDATE (FIXED — keeps same ID)
     public boolean updateContributor(String id, Contributor updatedContributor) {
+
         List<Contributor> contributors = getAllContributors();
         boolean updated = false;
 
@@ -77,16 +100,22 @@ public class ContributorService {
                      new BufferedWriter(new FileWriter(FILE_PATH))) {
 
             for (Contributor c : contributors) {
+
                 if (c.getId().equals(id)) {
+
+                    // ✅ KEEP ORIGINAL ID (VERY IMPORTANT)
                     writer.write(
-                            updatedContributor.getId() + "," +
+                            id + "," +
                                     updatedContributor.getName() + "," +
                                     updatedContributor.getRole() + "," +
                                     updatedContributor.getAge() + "," +
                                     updatedContributor.getCountry()
                     );
+
                     updated = true;
+
                 } else {
+
                     writer.write(
                             c.getId() + "," +
                                     c.getName() + "," +
@@ -95,6 +124,7 @@ public class ContributorService {
                                     c.getCountry()
                     );
                 }
+
                 writer.newLine();
             }
 
@@ -107,6 +137,7 @@ public class ContributorService {
 
     // ✅ DELETE
     public boolean deleteContributor(String id) {
+
         List<Contributor> contributors = getAllContributors();
         boolean deleted = false;
 
@@ -114,7 +145,9 @@ public class ContributorService {
                      new BufferedWriter(new FileWriter(FILE_PATH))) {
 
             for (Contributor c : contributors) {
+
                 if (!c.getId().equals(id)) {
+
                     writer.write(
                             c.getId() + "," +
                                     c.getName() + "," +
@@ -122,7 +155,9 @@ public class ContributorService {
                                     c.getAge() + "," +
                                     c.getCountry()
                     );
+
                     writer.newLine();
+
                 } else {
                     deleted = true;
                 }
