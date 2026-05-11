@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contributor Profiles</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<script>
+  if (localStorage.getItem("role") !== "ADMIN") {
+      alert("Admins only!");
+      window.location.href = "login.html";
+  }
+</script>
+
+<div class="container">
+
+  <h1>Contributor Profiles</h1>
+
+  <div class="nav">
+    <a href="add-contributor.html">Add Contributor</a> |
+    <a href="add-movie.html">Add Movie</a> |
+    <a href="contributors.html">Contributors</a>
+  </div>
+
+  <button onclick="loadContributors()">Load Contributors</button>
+
+  <ul id="list"></ul>
+
+</div>
+
+<script>
+
+  function loadContributors() {
+
+      fetch("/contributors/all")
+          .then(res => res.json())
+          .then(data => {
+
+              const list = document.getElementById("list");
+              list.innerHTML = "";
+
+              data.forEach(c => {
+
+                  const li = document.createElement("li");
+
+                  li.innerHTML = `
+                      <b>${c.name}</b><br>
+                      Role: ${c.role}<br>
+                      Age: ${c.age}<br>
+                      Country: ${c.country}<br>
+
+                      <button onclick="edit('${c.id}')">Edit</button>
+                      <button onclick="del('${c.id}')">Delete</button>
+                      <hr>
+                  `;
+
+                  list.appendChild(li);
+              });
+          });
+  }
+
+  // ✅ DELETE
+  function del(id) {
+      fetch(`/contributors/delete/${id}`, {
+          method: "DELETE"
+      })
+      .then(res => res.text())
+      .then(msg => {
+          alert(msg);
+          loadContributors();
+      });
+  }
+
+  // ✅ EDIT (next step)
+  function edit(id) {
+      alert("Edit functionality coming next 😄");
+  }
+
+</script>
+
+</body>
+</html>
