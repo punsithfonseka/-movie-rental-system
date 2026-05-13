@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>Movie Cast Viewer</title>
-    <link rel = "stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
 <script>
@@ -19,15 +20,13 @@
 
     <h1>Movie Cast Viewer</h1>
 
-    <p>Search movie by title</p>
+    <!-- ✅ MOVIE LIST -->
+    <div id="moviesList"></div>
 
-    <!-- ✅ INPUT -->
-    <label>Movie Title</label>
-    <input type="text" id="movieTitle" placeholder="Enter movie name">
+    <hr>
 
-    <button onclick="loadActors()">View Contributors</button>
-
-
+    <!-- ✅ RESULTS -->
+    <div id="result"></div>
     <ul id="actorList"></ul>
 
     <button onclick="logout()">Logout</button>
@@ -36,55 +35,86 @@
 
 <script>
 
-    function loadActors() {
+    // ✅ LOAD ALL MOVIES AUTOMATICALLY
+    document.addEventListener("DOMContentLoaded", loadAllMovies);
 
-        const title = document.getElementById("movieTitle").value.trim();
+    function loadAllMovies() {
+
+        const listDiv = document.getElementById("moviesList");
+        listDiv.innerHTML = "<h3>Select a Movie</h3>";
+
+        fetch("/movies/all")
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.length === 0) {
+                    listDiv.innerHTML += "<p>No movies available</p>";
+                    return;
+                }
+
+                data.forEach(m => {
+
+                    const div = document.createElement("div");
+                    div.className = "movie-card";
+                    div.innerText = m.title;
+
+                    div.onclick = function () {
+                        viewMovie(m.title);
+                    };
+
+                    listDiv.appendChild(div);
+                });
+            });
+    }
+
+
+    // ✅ CLICK MOVIE
+    function viewMovie(title) {
+
+        const resultDiv = document.getElementById("result");
         const actorList = document.getElementById("actorList");
 
+        resultDiv.innerHTML = "";
         actorList.innerHTML = "";
 
-        if (!title) {
-            actorList.innerHTML = "<li>Please enter movie title</li>";
-            return;
-        }
-
-        // ✅ Step 1: Find movie by title
-        fetch(`/movies/search?title=${title}`)
+        fetch(`/movies/search?title=${encodeURIComponent(title)}`)
             .then(res => res.json())
             .then(movie => {
 
                 if (!movie) {
-                    actorList.innerHTML = "<li>Movie not found</li>";
+                    resultDiv.innerHTML = "Movie not found";
                     return;
                 }
 
-                // ✅ Step 2: Use movieId to get actors
+                // ✅ SHOW TITLE
+                resultDiv.innerHTML = `<h2>${movie.title}</h2>`;
+
                 fetch(`/movies/${movie.movieId}/contributors`)
                     .then(res => res.json())
                     .then(data => {
 
                         if (data.length === 0) {
-                            actorList.innerHTML = "<li>No actors found</li>";
+                            actorList.innerHTML = "<li>No contributors found</li>";
                             return;
                         }
+
+                        resultDiv.innerHTML += `<p><b>Cast (${data.length})</b></p>`;
 
                         data.forEach(actor => {
                             const li = document.createElement("li");
                             li.innerHTML = `
                                 <b>${actor.name}</b><br>
-                                ID: ${actor.id}
+                                ${actor.role}
                             `;
                             actorList.appendChild(li);
                         });
-                    });
 
-            })
-            .catch(err => {
-                console.error(err);
-                actorList.innerHTML = "<li>Error loading data</li>";
+                    });
             });
     }
 
+
+    // ✅ LOGOUT
     function logout() {
         localStorage.clear();
         window.location.href = "login.html";
@@ -94,3 +124,4 @@
 
 </body>
 </html>
+``

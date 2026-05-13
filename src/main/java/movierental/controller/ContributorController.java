@@ -2,16 +2,18 @@ package movierental.controller;
 
 import movierental.model.Contributor;
 import movierental.service.ContributorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/contributors")
-
 public class ContributorController {
 
-    private ContributorService contributorService = new ContributorService();
+    // ✅ FIX: Let Spring manage this (VERY IMPORTANT)
+    @Autowired
+    private ContributorService contributorService;
 
     // ✅ CREATE: Add a contributor
     @PostMapping("/add")
@@ -25,7 +27,8 @@ public class ContributorController {
     public List<Contributor> getAllContributors() {
         return contributorService.getAllContributors();
     }
-    // UPDATE contributor
+
+    // ✅ UPDATE contributor
     @PutMapping("/update/{id}")
     public String updateContributor(
             @PathVariable String id,
@@ -37,7 +40,7 @@ public class ContributorController {
                 : "Contributor not found";
     }
 
-    // DELETE contributor
+    // ✅ DELETE contributor
     @DeleteMapping("/delete/{id}")
     public String deleteContributor(@PathVariable String id) {
 
@@ -47,5 +50,3 @@ public class ContributorController {
                 : "Contributor not found";
     }
 }
-
-

@@ -1,10 +1,4 @@
-/* ================================================= */
-/* GLOBAL RESET */
-/* ================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
+/* ================================================= *//* =================================================: 0;
     padding: 0;
     font-family: "Segoe UI", "Poppins", sans-serif;
 }
@@ -14,16 +8,19 @@
 /* ================================================= */
 
 body {
-    height: 100vh;
+    min-height: 100vh;
 
-    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
                 url("/images/bg.jpg");
 
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 
-    color: #ffffff;
+    color: white;
 }
 
 /* ================================================= */
@@ -31,70 +28,64 @@ body {
 /* ================================================= */
 
 .container {
-    max-width: 500px;
-    margin: 80px auto;
-    padding: 35px;
+    width: 100%;
+    max-width: 400px;
 
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    padding: 20px;
 
-    border-radius: 22px;
+    background: rgba(0,0,0,0.55);   /* lighter */
+    backdrop-filter: blur(10px);
 
-    box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.65),
-        inset 0 0 0 1px rgba(255,255,255,0.08);
+    border-radius: 14px;
 
-    animation: fadeIn 0.5s ease;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+
+    text-align: center;
 }
 
 /* ================================================= */
 /* HEADINGS */
 /* ================================================= */
 
-h1, h2 {
-    text-align: center;
+h1 {
+    font-size: 24px;
     color: #f5c518;
-    margin-bottom: 18px;
-    text-shadow: 0 4px 20px rgba(245,197,24,0.5);
+    margin-bottom: 12px;
 }
 
 /* ================================================= */
-/* INPUTS */
+/* FORM */
 /* ================================================= */
 
+.form-group {
+    margin-bottom: 12px;
+    text-align: left;
+}
+
 label {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 3px;
     display: block;
-    margin-top: 15px;
-    font-weight: 500;
 }
 
 input, select {
     width: 100%;
-    padding: 14px;
-    margin-top: 6px;
-    margin-bottom: 18px;
+    padding: 10px;
 
-    border-radius: 12px;
+    border-radius: 14px;
     border: none;
 
-    background: rgba(0,0,0,0.65);
+    background: rgba(0,0,0,0.6);   /* softer */
     color: white;
 
-    font-size: 14px;
-
-    transition: 0.2s ease;
+    font-size: 13px;
 }
 
-/* focus glow */
+/* focus */
 input:focus, select:focus {
     outline: none;
-    box-shadow: 0 0 8px rgba(245,197,24,0.6);
-}
-
-/* multi select */
-select[multiple] {
-    height: 120px;
+    box-shadow: 0 0 6px rgba(245,197,24,0.5);
 }
 
 /* ================================================= */
@@ -103,147 +94,128 @@ select[multiple] {
 
 button {
     width: 100%;
-    margin-top: 12px;
-    padding: 15px;
+    padding: 10px;
+    margin-top: 8px;
 
-    border-radius: 40px;
+    border-radius: 18px;
     border: none;
 
     background: linear-gradient(135deg, #f5c518, #ffde59);
     color: black;
 
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-
-    transition: 0.3s;
 }
 
 button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 10px 25px rgba(245,197,24,0.6);
-}
-
-/* secondary button (logout/back) */
-button:last-of-type {
-    background: #555;
-    color: white;
-}
-
-button:last-of-type:hover {
-    background: #333;
+    transform: scale(1.02);
 }
 
 /* ================================================= */
-/* BACK/NEXT NAV BUTTONS */
-/* ================================================= */
-
-/* ✅ SMALLER NAV BUTTONS */
-
-.nav-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-/* smaller buttons */
-.nav-buttons button {
-    width: 120px;          /* 👈 small size */
-    padding: 10px;
-    font-size: 13px;
-    border-radius: 25px;
-}
-
-
-/* ================================================= */
-/* CONTRIBUTOR CARDS */
+/* ✅ CONTRIBUTOR CARDS (MAIN FIX) */
 /* ================================================= */
 
 ul {
     list-style: none;
-    margin-top: 25px;
+    margin-top: 15px;
+    padding: 0;
 }
 
-li {
-    background: rgba(0, 0, 0, 0.75);
-    padding: 18px;
-    margin-bottom: 15px;
+.card {
+    background: rgba(0,0,0,0.55);  /* lighter card */
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
 
-    border-radius: 14px;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.6),
-        inset 0 0 0 1px rgba(255,255,255,0.08);
-
-    transition: 0.2s ease;
-}
-
-/* hover lift */
-li:hover {
-    transform: translateY(-3px);
+    text-align: left;
 }
 
 /* name */
-li b {
-    font-size: 18px;
+.card h3 {
+    font-size: 16px;
     color: #f5c518;
+    margin-bottom: 5px;
+}
+
+/* text */
+.card p {
+    font-size: 13px;
+    color: #ccc;
+    margin: 2px 0;
 }
 
 /* ================================================= */
-/* INLINE BUTTONS */
+/* ACTION BUTTONS (FIX UGLY PART) */
 /* ================================================= */
 
-li button {
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.actions button {
     width: auto;
-    padding: 6px 12px;
-    margin-top: 10px;
-    margin-right: 8px;
-    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 12px;
 }
 
-/* edit button */
-li button:nth-child(5) {
+/* edit */
+.actions button:first-child {
     background: #4caf50;
     color: white;
 }
 
-/* delete button */
-li button:nth-child(6) {
-    background: #ff4c4c;
+/* delete */
+.actions button:last-child {
+    background: #e53935;
     color: white;
 }
 
 /* ================================================= */
-/* BADGE */
+/* ✅ SMALL NAV BUTTONS */
 /* ================================================= */
 
-.badge {
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.nav-buttons button {
+    width: 38px;
+    height: 38px;
+
+    padding: 0;
+    border-radius: 50%;
+
+    font-size: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.nav-buttons button:hover {
     background: #f5c518;
     color: black;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 12px;
 }
 
 /* ================================================= */
-/* DIVIDER */
+/* RESULT */
 /* ================================================= */
 
-hr {
-    margin-top: 12px;
-    border: 1px solid #555;
+#result {
+    margin-top: 8px;
 }
 
-/* ================================================= */
-/* ANIMATION */
+/* GLOBAL RESET */
 /* ================================================= */
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+* {
+    box-sizing: border-box;

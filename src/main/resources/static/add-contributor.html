@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><!DOCTYPE lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Add Contributor</title>
@@ -22,29 +21,38 @@
     <h1 id="title">Add Contributor</h1>
 
     <!-- ✅ FORM -->
-    <label>Name</label>
-    <input type="text" id="name" placeholder="Leonardo DiCaprio">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="name" placeholder="Leonardo DiCaprio">
+    </div>
 
-    <label>Role</label>
-    <select id="role">
-        <option value="">Select Role</option>
-        <option value="Actor">Actor</option>
-        <option value="Director">Director</option>
-    </select>
+    <div class="form-group">
+        <label>Role</label>
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="Actor">Actor</option>
+            <option value="Director">Director</option>
+        </select>
+    </div>
 
-    <label>Age</label>
-    <input type="number" id="age" placeholder="48">
+    <div class="form-group">
+        <label>Age</label>
+        <input type="number" id="age" placeholder="48">
+    </div>
 
-    <label>Country</label>
-    <input type="text" id="country" placeholder="USA">
+    <div class="form-group">
+        <label>Country</label>
+        <input type="text" id="country" placeholder="USA">
+    </div>
 
+    <!-- ✅ MAIN ACTION -->
     <button id="actionBtn" onclick="handleSubmit()">Add Contributor</button>
     <button onclick="logout()">Logout</button>
 
     <div id="result"></div>
 
-    <!-- ✅ ✅ SMALL ICON NAV (BOTTOM) -->
-    <div class="bottom-nav">
+    <!-- ✅ ✅ CLEAN SMALL NAV BUTTONS -->
+    <div class="nav-buttons">
         <button onclick="goBack()">⬅</button>
         <button onclick="goNext()">➡</button>
     </div>
@@ -62,13 +70,12 @@
         window.location.href = "add-movie.html";
     }
 
-
     // ✅ CHECK EDIT MODE
     const params = new URLSearchParams(window.location.search);
     const editId = params.get("id");
     const isEditMode = editId !== null;
 
-    // ✅ LOAD DATA (EDIT MODE)
+    // ✅ LOAD DATA
     function loadContributor() {
 
         if (!isEditMode) return;
@@ -78,7 +85,6 @@
             .then(data => {
 
                 const c = data.find(x => x.id === editId);
-
                 if (!c) return;
 
                 document.getElementById("name").value = c.name;
@@ -92,7 +98,6 @@
     }
 
     loadContributor();
-
 
     // ✅ ADD / UPDATE
     function handleSubmit() {
@@ -132,7 +137,6 @@
             })
             .then(res => res.text())
             .then(msg => {
-
                 document.getElementById("result").innerText = msg;
 
                 document.getElementById("name").value = "";
@@ -142,7 +146,6 @@
             });
         }
     }
-
 
     // ✅ LOGOUT
     function logout() {

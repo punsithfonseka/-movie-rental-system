@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><!DOCTYPE html="en">
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
@@ -9,16 +8,18 @@
 
 <body>
 
-<div class="container">
+<div class="login-box">
 
-  <h1>Login</h1>
-  <p>Please login to continue</p>
+  <h1>🎬 Welcome Back</h1>
+  <p>Login to continue</p>
 
-  <label>Username</label>
-  <input type="text" id="username" placeholder="admin1 or user1">
+  <div class="form-group">
+    <input type="text" id="username" placeholder="Username">
+  </div>
 
-  <label>Password</label>
-  <input type="password" id="password" placeholder="1234">
+  <div class="form-group">
+    <input type="password" id="password" placeholder="Password">
+  </div>
 
   <button onclick="login()">Login</button>
 
@@ -29,38 +30,46 @@
 <script>
 
   function login() {
+
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
       const result = document.getElementById("result");
 
+      result.innerText = "";
+
       if (!username || !password) {
-          result.innerText = "Please enter username and password";
+          result.innerText = "Please fill all fields";
           return;
       }
 
-      fetch(`/login?username=${username}&password=${password}`)
+      fetch(`/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
           .then(res => res.text())
           .then(data => {
 
-              result.innerText = data;
-
-              // ✅ ADMIN LOGIN
               if (data.toLowerCase().includes("admin")) {
                   localStorage.setItem("role", "ADMIN");
+                  result.innerText = "Login successful ✅";
 
-                  // ✅ redirect to dashboard (better flow)
-                  window.location.href = "add-contributor.html";
+                  setTimeout(() => {
+                      window.location.href = "add-contributor.html";
+                  }, 700);
               }
 
-              // ✅ USER LOGIN
               else if (data.toLowerCase().includes("user")) {
                   localStorage.setItem("role", "USER");
+                  result.innerText = "Login successful ✅";
 
-                  window.location.href = "view-movie-cast.html";
+                  setTimeout(() => {
+                      window.location.href = "view-movie-cast.html";
+                  }, 700);
+              }
+
+              else {
+                  result.innerText = "Invalid login ❌";
               }
           })
           .catch(() => {
-              result.innerText = "Login failed. Try again.";
+              result.innerText = "Error. Try again.";
           });
   }
 

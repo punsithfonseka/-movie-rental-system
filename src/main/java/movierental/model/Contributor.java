@@ -1,14 +1,20 @@
 package movierental.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity   // ✅ tells Spring this is a table
 public class Contributor {
 
+    @Id   // ✅ primary key
     private String id;
+
     private String name;
     private String role;
     private int age;
     private String country;
 
-
+    // ✅ Default constructor (required)
     public Contributor() {}
 
     public Contributor(String id, String name, String role, int age, String country) {
@@ -17,9 +23,9 @@ public class Contributor {
         this.role = role;
         this.age = age;
         this.country = country;
-
     }
 
+    // ✅ Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -34,7 +40,4 @@ public class Contributor {
 
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
-
-
-
 }

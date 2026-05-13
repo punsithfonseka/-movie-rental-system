@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<title>Contributor Profiles</title><html>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -8,7 +8,6 @@
 <script>
   // ✅ Admin only access
   if (localStorage.getItem("role") !== "ADMIN") {
-      console.log("ROLE:", localStorage.getItem("role"));
       alert("Admins only!");
       window.location.href = "login.html";
   }
@@ -18,7 +17,7 @@
 
   <h1>Contributor Profiles</h1>
 
-  <!-- ✅ BACK BUTTON ONLY -->
+  <!-- ✅ BACK BUTTON -->
   <div class="nav-buttons">
     <button onclick="goBack()">Back</button>
   </div>
@@ -37,7 +36,6 @@
       window.location.href = "add-movie.html";
   }
 
-
   // ✅ LOAD CONTRIBUTORS
   function loadContributors() {
 
@@ -52,15 +50,21 @@
 
                   const li = document.createElement("li");
 
+                  // ✅ CLEAN CARD STYLE
                   li.innerHTML = `
-                      <b>${c.name}</b><br>
-                      Role: ${c.role}<br>
-                      Age: ${c.age}<br>
-                      Country: ${c.country}<br>
+                      <div class="card">
 
-                      <button onclick="goEdit('${c.id}')">Edit</button>
-                      <button onclick="del('${c.id}')">Delete</button>
-                      <hr>
+                          <h3>${c.name}</h3>
+                          <p>Role: ${c.role}</p>
+                          <p>Age: ${c.age}</p>
+                          <p>Country: ${c.country}</p>
+
+                          <div class="actions">
+                              <button onclick="goEdit('${c.id}')">Edit</button>
+                              <button onclick="del('${c.id}')">Delete</button>
+                          </div>
+
+                      </div>
                   `;
 
                   list.appendChild(li);
@@ -68,10 +72,8 @@
           });
   }
 
-
   // ✅ DELETE
   function del(id) {
-
       fetch(`/contributors/delete/${id}`, {
           method: "DELETE"
       })
@@ -81,7 +83,6 @@
           loadContributors();
       });
   }
-
 
   // ✅ GO TO EDIT
   function goEdit(id) {
@@ -93,4 +94,3 @@
 </body>
 </html>
 
-<head>
