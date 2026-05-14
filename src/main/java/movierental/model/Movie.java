@@ -1,52 +1,41 @@
 package movierental.model;
 
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
 public class Movie {
 
+    @Id
     private String movieId;
+
     private String title;
-    private String actorIds;
-    private String directorIds;
+    private int year;
 
-    // ✅ Constructor
-    public Movie(String movieId, String title, String actorIds, String directorIds) {
+    // ✅ RELATIONSHIP (IMPORTANT ⭐)
+    @ManyToMany
+    private List<Contributor> contributors;
+
+    public Movie() {}
+
+    public Movie(String movieId, String title, int year, List<Contributor> contributors) {
         this.movieId = movieId;
         this.title = title;
-        this.actorIds = actorIds;
-        this.directorIds = directorIds;
+        this.year = year;
+        this.contributors = contributors;
     }
 
-    // ✅ GETTERS
-    public String getMovieId() {
-        return movieId;
-    }
+    // getters & setters
 
-    public String getTitle() {
-        return title;
-    }
+    public String getMovieId() { return movieId; }
+    public void setMovieId(String movieId) { this.movieId = movieId; }
 
-    public String getActorIds() {
-        return actorIds;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getDirectorIds() {
-        return directorIds;
-    }
+    public int getYear() { return year; }
+    public void setYear(int year) { this.year = year; }
 
-    // ✅ ✅ ADD THESE SETTERS (VERY IMPORTANT)
-
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setActorIds(String actorIds) {
-        this.actorIds = actorIds;
-    }
-
-    public void setDirectorIds(String directorIds) {
-        this.directorIds = directorIds;
-    }
+    public List<Contributor> getContributors() { return contributors; }
+    public void setContributors(List<Contributor> contributors) { this.contributors = contributors; }
 }

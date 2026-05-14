@@ -20,7 +20,7 @@
   <h1>Add Movie</h1>
   <p>Admin only</p>
 
-  <!-- ✅ SIMPLE NAV -->
+  <!-- ✅ NAV -->
   <div class="nav-buttons">
     <button onclick="goBack()">Back</button>
     <button onclick="goNext()">Next</button>
@@ -56,7 +56,6 @@
       window.location.href = "contributors.html";
   }
 
-
   // ✅ LOAD CONTRIBUTORS
   document.addEventListener("DOMContentLoaded", loadContributors);
 
@@ -72,7 +71,6 @@
               actorSelect.innerHTML = "";
               directorSelect.innerHTML = "";
 
-              // ✅ Populate dropdowns
               data.forEach(c => {
 
                   if (c.role === "Actor") {
@@ -83,49 +81,63 @@
                       directorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
                   }
               });
-          })
-          .catch(() => {
-              console.error("Error loading contributors");
           });
   }
 
-
-  // ✅ ADD MOVIE (FIXED ✅)
+  // ✅ ✅ ✅ FIXED ADD MOVIE (IMPORTANT)
   function addMovie() {
 
       const title = document.getElementById("title").value.trim();
       const actorSelect = document.getElementById("actors");
       const directorId = document.getElementById("director").value;
 
-      const selectedActors = Array.from(actorSelect.selectedOptions)
-          .map(opt => opt.value)
-          .join("|");
+      // ✅ get selected actors as objects
+      const contributors = Array.from(actorSelect.selectedOptions)
+          .map(opt => ({ id: opt.value }));
 
-      // ✅ FIXED validation
-      if (!title || selectedActors.length === 0 || !directorId) {
+      // ✅ include director also
+      if (directorId) {
+          contributors.push({ id: directorId });
+      }
+
+      // ✅ validation
+      if (!title || contributors.length === 0) {
           document.getElementById("result").innerText = "Please fill all fields";
           return;
       }
 
-      // ✅ DEBUG (optional)
-      console.log(title, selectedActors, directorId);
+      // ✅ movie object (matches backend)
+      const movie = {
+          movieId: "M" + Math.floor(Math.random() * 1000),
+          title: title,
+          year: 2024,
+          contributors: contributors
+      };
 
-      // ✅ FIXED REQUEST (IMPORTANT ✅)
-      fetch(`/movies/add?title=${encodeURIComponent(title)}&actorIds=${encodeURIComponent(selectedActors)}&directorIds=${encodeURIComponent(directorId)}`)
-          .then(res => res.text())
-          .then(data => {
-              document.getElementById("result").innerText = data;
+      console.log(movie);
 
-              // ✅ RESET
-              document.getElementById("title").value = "";
-              actorSelect.selectedIndex = -1;
-              document.getElementById("director").selectedIndex = 0;
-          })
-          .catch(() => {
-              document.getElementById("result").innerText = "Error adding movie";
-          });
+      // ✅ CORRECT POST REQUEST
+      fetch("/movies/add", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(movie)
+      })
+      .then(res => res.text())
+      .then(data => {
+
+          document.getElementById("result").innerText = data;
+
+          // reset
+          document.getElementById("title").value = "";
+          actorSelect.selectedIndex = -1;
+          document.getElementById("director").selectedIndex = 0;
+      })
+      .catch(() => {
+          document.getElementById("result").innerText = "Error adding movie";
+      });
   }
-
 
   // ✅ LOGOUT
   function logout() {
@@ -137,4 +149,3 @@
 
 </body>
 </html>
-``

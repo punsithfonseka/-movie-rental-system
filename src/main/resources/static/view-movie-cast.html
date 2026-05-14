@@ -3,14 +3,111 @@
 <head>
     <title>Movie Cast Viewer</title>
     <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+
+        /* ✅ SEARCH AREA */
+        #searchBox {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #search {
+            width: 100%;
+            padding: 14px;
+            border-radius: 25px;
+            border: none;
+            background: black;
+            color: white;
+            font-size: 16px;
+        }
+
+        #search:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(245,197,24,0.6);
+        }
+
+        /* ✅ SEARCH BUTTON */
+        #searchBox button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* ✅ FLOATING DROPDOWN */
+        #suggestions {
+            position: absolute;
+            top: 55px;
+            left: 0;
+            width: 100%;
+
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+
+            max-height: 200px;
+            overflow-y: auto;
+
+            display: none; /* ✅ hidden initially */
+            z-index: 1000;
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .suggestion-item:hover {
+            background: #f5c518;
+            color: black;
+        }
+
+        /* ✅ BIG PROFILE BUTTON */
+        .profile-btn {
+            background: rgba(0,0,0,0.85);
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .profile-btn:hover {
+            background: #f5c518;
+            color: black;
+            transform: scale(1.03);
+        }
+
+        .name {
+            font-weight: bold;
+        }
+
+        .role {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        #profile {
+            margin-top: 20px;
+        }
+
+    </style>
 </head>
 
 <body>
 
 <script>
-    const role = localStorage.getItem("role");
-
-    if (!role) {
+    if (!localStorage.getItem("role")) {
         alert("Please login first");
         window.location.href = "login.html";
     }
@@ -20,14 +117,23 @@
 
     <h1>Movie Cast Viewer</h1>
 
-    <!-- ✅ MOVIE LIST -->
-    <div id="moviesList"></div>
+    <!-- ✅ SEARCH -->
+    <div id="searchBox">
+        <input type="text" id="search" placeholder="Search movie..."
+               onkeyup="showSuggestions()" />
+
+        <button onclick="searchMovie()">Search</button>
+
+        <div id="suggestions"></div>
+    </div>
 
     <hr>
 
-    <!-- ✅ RESULTS -->
     <div id="result"></div>
+
     <ul id="actorList"></ul>
+
+    <div id="profile"></div>
 
     <button onclick="logout()">Logout</button>
 
@@ -35,84 +141,119 @@
 
 <script>
 
-    // ✅ LOAD ALL MOVIES AUTOMATICALLY
-    document.addEventListener("DOMContentLoaded", loadAllMovies);
+    let allMovies = [];
 
-    function loadAllMovies() {
-
-        const listDiv = document.getElementById("moviesList");
-        listDiv.innerHTML = "<h3>Select a Movie</h3>";
-
+    // ✅ LOAD MOVIES
+    document.addEventListener("DOMContentLoaded", () => {
         fetch("/movies/all")
             .then(res => res.json())
             .then(data => {
-
-                if (data.length === 0) {
-                    listDiv.innerHTML += "<p>No movies available</p>";
-                    return;
-                }
-
-                data.forEach(m => {
-
-                    const div = document.createElement("div");
-                    div.className = "movie-card";
-                    div.innerText = m.title;
-
-                    div.onclick = function () {
-                        viewMovie(m.title);
-                    };
-
-                    listDiv.appendChild(div);
-                });
+                allMovies = data;
             });
+    });
+
+    // ✅ BEAUTIFUL SUGGESTIONS
+    function showSuggestions() {
+
+        const keyword = document.getElementById("search").value.toLowerCase();
+        const box = document.getElementById("suggestions");
+
+        box.innerHTML = "";
+
+        if (!keyword) {
+            box.style.display = "none";
+            return;
+        }
+
+        const filtered = allMovies.filter(m =>
+            m.title.toLowerCase().includes(keyword)
+        );
+
+        filtered.forEach(movie => {
+
+            const div = document.createElement("div");
+            div.className = "suggestion-item";
+            div.innerText = movie.title;
+
+            div.onclick = function () {
+                document.getElementById("search").value = movie.title;
+                box.style.display = "none";
+                showMovie(movie);
+            };
+
+            box.appendChild(div);
+        });
+
+        box.style.display = filtered.length ? "block" : "none";
     }
 
+    // ✅ SEARCH BUTTON
+    function searchMovie() {
 
-    // ✅ CLICK MOVIE
-    function viewMovie(title) {
+        const keyword = document.getElementById("search").value.toLowerCase();
+
+        const movie = allMovies.find(m =>
+            m.title.toLowerCase() === keyword
+        );
+
+        if (!movie) {
+            alert("Movie not found");
+            return;
+        }
+
+        document.getElementById("suggestions").style.display = "none";
+        showMovie(movie);
+    }
+
+    // ✅ SHOW MOVIE
+    function showMovie(movie) {
 
         const resultDiv = document.getElementById("result");
         const actorList = document.getElementById("actorList");
 
-        resultDiv.innerHTML = "";
+        resultDiv.innerHTML = `<h2>${movie.title}</h2>`;
         actorList.innerHTML = "";
+        document.getElementById("profile").innerHTML = "";
 
-        fetch(`/movies/search?title=${encodeURIComponent(title)}`)
-            .then(res => res.json())
-            .then(movie => {
+        if (!movie.contributors) return;
 
-                if (!movie) {
-                    resultDiv.innerHTML = "Movie not found";
-                    return;
-                }
+        resultDiv.innerHTML += `<p><b>Cast (${movie.contributors.length})</b></p>`;
 
-                // ✅ SHOW TITLE
-                resultDiv.innerHTML = `<h2>${movie.title}</h2>`;
+        movie.contributors.forEach(c => {
 
-                fetch(`/movies/${movie.movieId}/contributors`)
-                    .then(res => res.json())
-                    .then(data => {
+            const li = document.createElement("li");
+            li.className = "profile-btn";
 
-                        if (data.length === 0) {
-                            actorList.innerHTML = "<li>No contributors found</li>";
-                            return;
-                        }
+            li.innerHTML = `
+                <span class="name">${c.name}</span>
+                <span class="role">${c.role}</span>
+            `;
 
-                        resultDiv.innerHTML += `<p><b>Cast (${data.length})</b></p>`;
+            li.onclick = () => showProfile(c);
 
-                        data.forEach(actor => {
-                            const li = document.createElement("li");
-                            li.innerHTML = `
-                                <b>${actor.name}</b><br>
-                                ${actor.role}
-                            `;
-                            actorList.appendChild(li);
-                        });
-
-                    });
-            });
+            actorList.appendChild(li);
+        });
     }
 
+    // ✅ PROFILE
+    function showProfile(c) {
+
+        document.getElementById("profile").innerHTML = `
+            <div class="card">
+                <h3>${c.name}</h3>
+                <p><b>Role:</b> ${c.role}</p>
+                <p><b>Age:</b> ${c.age}</p>
+                <p><b>Country:</b> ${c.country}</p>
+            </div>
+        `;
+    }
+
+    // ✅ CLOSE SUGGESTIONS
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest("#searchBox")) {
+            document.getElementById("suggestions").style.display = "none";
+        }
+    });
 
     // ✅ LOGOUT
     function logout() {
@@ -124,4 +265,3 @@
 
 </body>
 </html>
-``

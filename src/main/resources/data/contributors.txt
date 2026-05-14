@@ -1,2 +1,0 @@
-D001,Christopher Nolan,Director,55,USA
-A003,John Doe,Actor,50,SL
