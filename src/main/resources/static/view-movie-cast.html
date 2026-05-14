@@ -6,7 +6,7 @@
 
     <style>
 
-        /* ✅ SEARCH AREA */
+        /* ✅ SEARCH */
         #searchBox {
             position: relative;
             margin-bottom: 20px;
@@ -27,39 +27,26 @@
             box-shadow: 0 0 10px rgba(245,197,24,0.6);
         }
 
-        /* ✅ SEARCH BUTTON */
         #searchBox button {
             width: 100%;
             margin-top: 10px;
         }
 
-        /* ✅ FLOATING DROPDOWN */
+        /* ✅ DROPDOWN */
         #suggestions {
             position: absolute;
             top: 55px;
-            left: 0;
             width: 100%;
-
             background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-
             box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-
-            max-height: 200px;
-            overflow-y: auto;
-
-            display: none; /* ✅ hidden initially */
+            display: none;
             z-index: 1000;
         }
 
         .suggestion-item {
-            padding: 12px 15px;
-            color: #ccc;
+            padding: 12px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
         .suggestion-item:hover {
@@ -67,16 +54,16 @@
             color: black;
         }
 
-        /* ✅ BIG PROFILE BUTTON */
+        /* ✅ PROFILE BUTTON */
         .profile-btn {
             background: rgba(0,0,0,0.85);
-            padding: 16px;
+            padding: 14px;
             border-radius: 14px;
             margin-bottom: 12px;
 
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 12px;
 
             cursor: pointer;
             transition: 0.25s;
@@ -84,8 +71,16 @@
 
         .profile-btn:hover {
             background: #f5c518;
-            color: black;
             transform: scale(1.03);
+            color: black;
+        }
+
+        /* ✅ IMAGE AVATAR */
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .name {
@@ -99,6 +94,15 @@
 
         #profile {
             margin-top: 20px;
+        }
+
+        /* ✅ BIG PROFILE CARD IMAGE */
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
 
     </style>
@@ -143,7 +147,7 @@
 
     let allMovies = [];
 
-    // ✅ LOAD MOVIES
+    // ✅ LOAD
     document.addEventListener("DOMContentLoaded", () => {
         fetch("/movies/all")
             .then(res => res.json())
@@ -152,7 +156,7 @@
             });
     });
 
-    // ✅ BEAUTIFUL SUGGESTIONS
+    // ✅ SUGGESTIONS
     function showSuggestions() {
 
         const keyword = document.getElementById("search").value.toLowerCase();
@@ -175,7 +179,7 @@
             div.className = "suggestion-item";
             div.innerText = movie.title;
 
-            div.onclick = function () {
+            div.onclick = () => {
                 document.getElementById("search").value = movie.title;
                 box.style.display = "none";
                 showMovie(movie);
@@ -187,11 +191,10 @@
         box.style.display = filtered.length ? "block" : "none";
     }
 
-    // ✅ SEARCH BUTTON
+    // ✅ SEARCH
     function searchMovie() {
 
         const keyword = document.getElementById("search").value.toLowerCase();
-
         const movie = allMovies.find(m =>
             m.title.toLowerCase() === keyword
         );
@@ -225,8 +228,9 @@
             li.className = "profile-btn";
 
             li.innerHTML = `
-                <span class="name">${c.name}</span>
-                <span class="role">${c.role}</span>
+                <img src="${c.photo}" class="avatar.name}</div>
+                    <div class="role">${c.role}</div>
+                </div>
             `;
 
             li.onclick = () => showProfile(c);
@@ -235,12 +239,12 @@
         });
     }
 
-    // ✅ PROFILE
+    // ✅ PROFILE WITH IMAGE
     function showProfile(c) {
 
         document.getElementById("profile").innerHTML = `
             <div class="card">
-                <h3>${c.name}</h3>
+                <img src="${c.photo}" class="profile-img>
                 <p><b>Role:</b> ${c.role}</p>
                 <p><b>Age:</b> ${c.age}</p>
                 <p><b>Country:</b> ${c.country}</p>
@@ -248,7 +252,7 @@
         `;
     }
 
-    // ✅ CLOSE SUGGESTIONS
+    // ✅ CLOSE DROPDOWN
     document.addEventListener("click", (e) => {
         if (!e.target.closest("#searchBox")) {
             document.getElementById("suggestions").style.display = "none";

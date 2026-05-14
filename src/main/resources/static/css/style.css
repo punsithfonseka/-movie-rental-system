@@ -1,5 +1,11 @@
-/* ================================================= *//* =================================================: 0;
+/* ================================================= */
+/* GLOBAL RESET */
+/* ================================================= */
+
+* {
+    margin: 0;
     padding: 0;
+    box-sizing: border-box;
     font-family: "Segoe UI", "Poppins", sans-serif;
 }
 
@@ -33,7 +39,7 @@ body {
 
     padding: 20px;
 
-    background: rgba(0,0,0,0.55);   /* lighter */
+    background: rgba(0,0,0,0.55);
     backdrop-filter: blur(10px);
 
     border-radius: 14px;
@@ -76,20 +82,19 @@ input, select {
     border-radius: 14px;
     border: none;
 
-    background: rgba(0,0,0,0.6);   /* softer */
+    background: rgba(0,0,0,0.6);
     color: white;
 
     font-size: 13px;
 }
 
-/* focus */
 input:focus, select:focus {
     outline: none;
     box-shadow: 0 0 6px rgba(245,197,24,0.5);
 }
 
 /* ================================================= */
-/* MAIN BUTTONS */
+/* BUTTONS */
 /* ================================================= */
 
 button {
@@ -113,7 +118,7 @@ button:hover {
 }
 
 /* ================================================= */
-/* ✅ CONTRIBUTOR CARDS (MAIN FIX) */
+/* ✅ CONTRIBUTOR CARDS */
 /* ================================================= */
 
 ul {
@@ -123,12 +128,39 @@ ul {
 }
 
 .card {
-    background: rgba(0,0,0,0.55);  /* lighter card */
+    background: rgba(0,0,0,0.55);
     padding: 14px;
     border-radius: 12px;
     margin-bottom: 12px;
 
     text-align: left;
+}
+
+/* ✅ FIXED IMAGE (MAIN CHANGE) */
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+/* ✅ SMALL IMAGE (LIST MODE) */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ✅ CARD HEADER (image + name inline) */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* name */
@@ -146,7 +178,7 @@ ul {
 }
 
 /* ================================================= */
-/* ACTION BUTTONS (FIX UGLY PART) */
+/* ACTION BUTTONS */
 /* ================================================= */
 
 .actions {
@@ -162,20 +194,18 @@ ul {
     border-radius: 12px;
 }
 
-/* edit */
 .actions button:first-child {
     background: #4caf50;
     color: white;
 }
 
-/* delete */
 .actions button:last-child {
     background: #e53935;
     color: white;
 }
 
 /* ================================================= */
-/* ✅ SMALL NAV BUTTONS */
+/* NAV BUTTONS */
 /* ================================================= */
 
 .nav-buttons {
@@ -213,9 +243,3 @@ ul {
 #result {
     margin-top: 8px;
 }
-
-/* GLOBAL RESET */
-/* ================================================= */
-
-* {
-    box-sizing: border-box;

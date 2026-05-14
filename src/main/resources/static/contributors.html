@@ -54,7 +54,11 @@
                   li.innerHTML = `
                       <div class="card">
 
-                          <h3>${c.name}</h3>
+                          <div class="card">
+                              <img src="${c.photo}" class="avatar">
+                              <h3>${c.name}</h3>
+                              <p>${c.role}</p>
+                          </div>
                           <p>Role: ${c.role}</p>
                           <p>Age: ${c.age}</p>
                           <p>Country: ${c.country}</p>

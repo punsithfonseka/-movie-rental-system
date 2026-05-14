@@ -3,12 +3,24 @@
 <head>
   <title>Add Movie</title>
   <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    #preview {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    #preview img {
+        width: 120px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
 <script>
-  // ✅ ADMIN GUARD
   if (localStorage.getItem("role") !== "ADMIN") {
       alert("Admins only");
       window.location.href = "login.html";
@@ -20,21 +32,24 @@
   <h1>Add Movie</h1>
   <p>Admin only</p>
 
-  <!-- ✅ NAV -->
   <div class="nav-buttons">
     <button onclick="goBack()">Back</button>
     <button onclick="goNext()">Next</button>
   </div>
 
-  <!-- ✅ TITLE -->
   <label>Title</label>
   <input type="text" id="title" placeholder="Inception">
 
-  <!-- ✅ ACTORS -->
+  <label>Poster URL</label>
+  <input type="text" id="poster"
+         placeholder="https://image-link"
+         oninput="previewImage()">
+
+  <div id="preview"></div>
+
   <label>Actors (Hold Ctrl to select multiple)</label>
   <select id="actors" multiple></select>
 
-  <!-- ✅ DIRECTOR -->
   <label>Director</label>
   <select id="director"></select>
 
@@ -47,16 +62,14 @@
 
 <script>
 
-  // ✅ NAVIGATION
   function goBack() {
-      window.location.href = "add-contributor.html";
+      window.location.href = "/add-contributor.html";
   }
 
   function goNext() {
-      window.location.href = "contributors.html";
+      window.location.href = "/contributors.html";
   }
 
-  // ✅ LOAD CONTRIBUTORS
   document.addEventListener("DOMContentLoaded", loadContributors);
 
   function loadContributors() {
@@ -84,39 +97,49 @@
           });
   }
 
-  // ✅ ✅ ✅ FIXED ADD MOVIE (IMPORTANT)
+  // ✅ FIXED PREVIEW FUNCTION
+  function previewImage() {
+
+      const url = document.getElementById("poster").value;
+      const preview = document.getElementById("preview");
+
+      if (!url) {
+          preview.innerHTML = "";
+          return;
+      }
+
+      preview.innerHTML = `${url}`;
+  }
+
+  // ✅ ADD MOVIE
   function addMovie() {
 
       const title = document.getElementById("title").value.trim();
+      const poster = document.getElementById("poster").value.trim();
+
       const actorSelect = document.getElementById("actors");
       const directorId = document.getElementById("director").value;
 
-      // ✅ get selected actors as objects
       const contributors = Array.from(actorSelect.selectedOptions)
           .map(opt => ({ id: opt.value }));
 
-      // ✅ include director also
       if (directorId) {
           contributors.push({ id: directorId });
       }
 
-      // ✅ validation
       if (!title || contributors.length === 0) {
           document.getElementById("result").innerText = "Please fill all fields";
           return;
       }
 
-      // ✅ movie object (matches backend)
       const movie = {
           movieId: "M" + Math.floor(Math.random() * 1000),
           title: title,
           year: 2024,
+          poster: poster,
           contributors: contributors
       };
 
-      console.log(movie);
-
-      // ✅ CORRECT POST REQUEST
       fetch("/movies/add", {
           method: "POST",
           headers: {
@@ -129,17 +152,15 @@
 
           document.getElementById("result").innerText = data;
 
-          // reset
           document.getElementById("title").value = "";
+          document.getElementById("poster").value = "";
+          document.getElementById("preview").innerHTML = "";
+
           actorSelect.selectedIndex = -1;
           document.getElementById("director").selectedIndex = 0;
-      })
-      .catch(() => {
-          document.getElementById("result").innerText = "Error adding movie";
       });
   }
 
-  // ✅ LOGOUT
   function logout() {
       localStorage.clear();
       window.location.href = "login.html";

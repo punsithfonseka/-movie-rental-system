@@ -1,4 +1,5 @@
-<!DOCTYPE html><!DOCTYPE lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Add Contributor</title>
@@ -21,6 +22,7 @@
     <h1 id="title">Add Contributor</h1>
 
     <!-- ✅ FORM -->
+
     <div class="form-group">
         <label>Name</label>
         <input type="text" id="name" placeholder="Leonardo DiCaprio">
@@ -45,13 +47,19 @@
         <input type="text" id="country" placeholder="USA">
     </div>
 
-    <!-- ✅ MAIN ACTION -->
+    <!-- ✅ ✅ NEW PHOTO FIELD -->
+    <div class="form-group">
+        <label>Photo URL</label>
+        <input type="text" id="photo" placeholder="https://image-link">
+    </div>
+
+    <!-- ✅ ACTION -->
     <button id="actionBtn" onclick="handleSubmit()">Add Contributor</button>
     <button onclick="logout()">Logout</button>
 
     <div id="result"></div>
 
-    <!-- ✅ ✅ CLEAN SMALL NAV BUTTONS -->
+    <!-- ✅ NAV -->
     <div class="nav-buttons">
         <button onclick="goBack()">⬅</button>
         <button onclick="goNext()">➡</button>
@@ -61,7 +69,6 @@
 
 <script>
 
-    // ✅ NAVIGATION
     function goBack() {
         window.location.href = "login.html";
     }
@@ -70,12 +77,11 @@
         window.location.href = "add-movie.html";
     }
 
-    // ✅ CHECK EDIT MODE
     const params = new URLSearchParams(window.location.search);
     const editId = params.get("id");
     const isEditMode = editId !== null;
 
-    // ✅ LOAD DATA
+    // ✅ LOAD (EDIT MODE)
     function loadContributor() {
 
         if (!isEditMode) return;
@@ -92,6 +98,9 @@
                 document.getElementById("age").value = c.age;
                 document.getElementById("country").value = c.country;
 
+                // ✅ LOAD PHOTO
+                document.getElementById("photo").value = c.photo || "";
+
                 document.getElementById("title").innerText = "Edit Contributor";
                 document.getElementById("actionBtn").innerText = "Update Contributor";
             });
@@ -106,7 +115,8 @@
             name: document.getElementById("name").value.trim(),
             role: document.getElementById("role").value.trim(),
             age: document.getElementById("age").value,
-            country: document.getElementById("country").value.trim()
+            country: document.getElementById("country").value.trim(),
+            photo: document.getElementById("photo").value.trim()   // ✅ NEW
         };
 
         if (!contributor.name || !contributor.role ||
@@ -137,17 +147,19 @@
             })
             .then(res => res.text())
             .then(msg => {
+
                 document.getElementById("result").innerText = msg;
 
+                // ✅ RESET
                 document.getElementById("name").value = "";
                 document.getElementById("role").value = "";
                 document.getElementById("age").value = "";
                 document.getElementById("country").value = "";
+                document.getElementById("photo").value = "";  // ✅ NEW
             });
         }
     }
 
-    // ✅ LOGOUT
     function logout() {
         localStorage.clear();
         window.location.href = "login.html";

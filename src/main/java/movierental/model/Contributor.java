@@ -3,10 +3,10 @@ package movierental.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity   // ✅ tells Spring this is a table
+@Entity
 public class Contributor {
 
-    @Id   // ✅ primary key
+    @Id
     private String id;
 
     private String name;
@@ -14,18 +14,24 @@ public class Contributor {
     private int age;
     private String country;
 
-    // ✅ Default constructor (required)
+    // ✅ NEW FIELD FOR IMAGE
+    private String photo;
+
+    // ✅ Default constructor
     public Contributor() {}
 
-    public Contributor(String id, String name, String role, int age, String country) {
+    // ✅ Updated constructor
+    public Contributor(String id, String name, String role, int age, String country, String photo) {
         this.id = id;
         this.name = name;
         this.role = role;
         this.age = age;
         this.country = country;
+        this.photo = photo;
     }
 
-    // ✅ Getters and setters
+    // ✅ Getters & Setters
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -40,4 +46,8 @@ public class Contributor {
 
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
+
+    // ✅ NEW getter/setter for photo
+    public String getPhoto() { return photo; }
+    public void setPhoto(String photo) { this.photo = photo; }
 }
