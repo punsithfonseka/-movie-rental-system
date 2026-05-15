@@ -14,40 +14,120 @@ public class Contributor {
     private int age;
     private String country;
 
-    // ✅ NEW FIELD FOR IMAGE
+    // PHOTO
     private String photo;
 
-    // ✅ Default constructor
+    // NEW ATTRIBUTES
+    private String description;
+    private String awards;
+    private String notableWorks;
+
+    // DEFAULT CONSTRUCTOR
     public Contributor() {}
 
-    // ✅ Updated constructor
-    public Contributor(String id, String name, String role, int age, String country, String photo) {
+    // UPDATED CONSTRUCTOR
+    public Contributor(
+            String id,
+            String name,
+            String role,
+            int age,
+            String country,
+            String photo,
+            String description,
+            String awards,
+            String notableWorks
+    ) {
+
         this.id = id;
         this.name = name;
         this.role = role;
         this.age = age;
         this.country = country;
         this.photo = photo;
+        this.description = description;
+        this.awards = awards;
+        this.notableWorks = notableWorks;
     }
 
-    // ✅ Getters & Setters
+    // GETTERS & SETTERS
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    // NAME
+    public String getName() {
+        return name;
+    }
 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
+    // ROLE
+    public String getRole() {
+        return role;
+    }
 
-    // ✅ NEW getter/setter for photo
-    public String getPhoto() { return photo; }
-    public void setPhoto(String photo) { this.photo = photo; }
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    // AGE
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    // COUNTRY
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    // PHOTO
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    // DESCRIPTION
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // AWARDS
+    public String getAwards() {
+        return awards;
+    }
+
+    public void setAwards(String awards) {
+        this.awards = awards;
+    }
+
+    // NOTABLE WORKS
+    public String getNotableWorks() {
+        return notableWorks;
+    }
+
+    public void setNotableWorks(String notableWorks) {
+        this.notableWorks = notableWorks;
+    }
 }

@@ -1,71 +1,399 @@
 <!DOCTYPE html>
-<title>Contributor Profiles</title><html>
-<link rel="stylesheet" href="/css/style.css">
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Contributor Profiles</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+
+    body {
+
+        background: #111;
+
+        color: white;
+
+        font-family: Arial, sans-serif;
+
+        margin: 0;
+
+        padding: 0;
+    }
+
+    .container {
+
+        width: 90%;
+
+        max-width: 1200px;
+
+        margin: auto;
+
+        padding: 30px;
+    }
+
+    h1 {
+
+        text-align: center;
+
+        color: #f5c518;
+
+        margin-bottom: 30px;
+
+        font-size: 42px;
+    }
+
+    /* BUTTONS */
+
+    .top-buttons {
+
+        display: flex;
+
+        gap: 15px;
+
+        margin-bottom: 30px;
+    }
+
+    .top-buttons button {
+
+        padding: 12px 20px;
+
+        border: none;
+
+        border-radius: 25px;
+
+        cursor: pointer;
+
+        font-weight: bold;
+
+        transition: 0.3s;
+    }
+
+    .load-btn {
+
+        background: #f5c518;
+
+        color: black;
+    }
+
+    .back-btn {
+
+        background: crimson;
+
+        color: white;
+    }
+
+    .top-buttons button:hover {
+
+        transform: scale(1.03);
+    }
+
+    /* LIST */
+
+    #list {
+
+        list-style: none;
+
+        padding: 0;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fit, minmax(320px, 1fr));
+
+        gap: 25px;
+    }
+
+    /* CARD */
+
+    .card {
+
+        background: rgba(255,255,255,0.07);
+
+        padding: 25px;
+
+        border-radius: 20px;
+
+        transition: 0.3s;
+
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .card:hover {
+
+        transform: translateY(-5px);
+
+        background: rgba(255,255,255,0.1);
+    }
+
+    /* IMAGE */
+
+    .avatar {
+
+        width: 120px;
+
+        height: 120px;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+
+        display: block;
+
+        margin: auto;
+
+        border: 3px solid #f5c518;
+
+        margin-bottom: 20px;
+    }
+
+    /* TEXT */
+
+    .card h3 {
+
+        text-align: center;
+
+        color: #f5c518;
+
+        margin-bottom: 15px;
+    }
+
+    .card p {
+
+        margin-bottom: 10px;
+
+        line-height: 1.5;
+    }
+
+    /* LABELS */
+
+    .label {
+
+        color: #f5c518;
+
+        font-weight: bold;
+    }
+
+    /* ACTION BUTTONS */
+
+    .actions {
+
+        display: flex;
+
+        gap: 10px;
+
+        margin-top: 20px;
+    }
+
+    .actions button {
+
+        flex: 1;
+
+        padding: 12px;
+
+        border: none;
+
+        border-radius: 25px;
+
+        cursor: pointer;
+
+        font-weight: bold;
+
+        transition: 0.3s;
+    }
+
+    .edit-btn {
+
+        background: #f5c518;
+
+        color: black;
+    }
+
+    .delete-btn {
+
+        background: crimson;
+
+        color: white;
+    }
+
+    .actions button:hover {
+
+        transform: scale(1.03);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 768px) {
+
+        .top-buttons {
+
+            flex-direction: column;
+        }
+
+        h1 {
+
+            font-size: 32px;
+        }
+    }
+
+  </style>
+
 </head>
 
 <body>
 
 <script>
-  // ✅ Admin only access
+
+  // ADMIN GUARD
   if (localStorage.getItem("role") !== "ADMIN") {
+
       alert("Admins only!");
+
       window.location.href = "login.html";
   }
+
 </script>
 
 <div class="container">
 
   <h1>Contributor Profiles</h1>
 
-  <!-- ✅ BACK BUTTON -->
-  <div class="nav-buttons">
-    <button onclick="goBack()">Back</button>
+  <!-- TOP BUTTONS -->
+  <div class="top-buttons">
+
+    <button
+            class="back-btn"
+            onclick="goBack()"
+    >
+      Back
+    </button>
+
+    <button
+            class="load-btn"
+            onclick="loadContributors()"
+    >
+      Load Contributors
+    </button>
+
   </div>
 
-  <!-- ✅ LOAD BUTTON -->
-  <button onclick="loadContributors()">Load Contributors</button>
-
+  <!-- LIST -->
   <ul id="list"></ul>
 
 </div>
 
 <script>
 
-  // ✅ BACK NAVIGATION
+  // BACK
   function goBack() {
+
       window.location.href = "add-movie.html";
   }
 
-  // ✅ LOAD CONTRIBUTORS
+  // LOAD CONTRIBUTORS
   function loadContributors() {
 
       fetch("/contributors/all")
+
           .then(res => res.json())
+
           .then(data => {
 
-              const list = document.getElementById("list");
+              const list =
+                  document.getElementById("list");
+
               list.innerHTML = "";
 
               data.forEach(c => {
 
-                  const li = document.createElement("li");
+                  const li =
+                      document.createElement("li");
 
-                  // ✅ CLEAN CARD STYLE
                   li.innerHTML = `
+
                       <div class="card">
 
-                          <div class="card">
-                              <img src="${c.photo}" class="avatar">
-                              <h3>${c.name}</h3>
-                              <p>${c.role}</p>
-                          </div>
-                          <p>Role: ${c.role}</p>
-                          <p>Age: ${c.age}</p>
-                          <p>Country: ${c.country}</p>
+                          <img
+                              src="${c.photo}"
+                              class="avatar"
+
+                              onerror="
+                              this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                              "
+                          >
+
+                          <h3>${c.name}</h3>
+
+                          <p>
+                              <span class="label">
+                                  Role:
+                              </span>
+
+                              ${c.role}
+                          </p>
+
+                          <p>
+                              <span class="label">
+                                  Age:
+                              </span>
+
+                              ${c.age}
+                          </p>
+
+                          <p>
+                              <span class="label">
+                                  Country:
+                              </span>
+
+                              ${c.country}
+                          </p>
+
+                          <p>
+                              <span class="label">
+                                  Description:
+                              </span>
+
+                              ${c.description || "No description available"}
+                          </p>
+
+                          <p>
+                              <span class="label">
+                                  Awards:
+                              </span>
+
+                              ${c.awards || "No awards listed"}
+                          </p>
+
+                          <p>
+                              <span class="label">
+                                  Notable Works:
+                              </span>
+
+                              ${c.notableWorks || "No works listed"}
+                          </p>
 
                           <div class="actions">
-                              <button onclick="goEdit('${c.id}')">Edit</button>
-                              <button onclick="del('${c.id}')">Delete</button>
+
+                              <button
+                                      class="edit-btn"
+                                      onclick="goEdit('${c.id}')"
+                              >
+                                  Edit
+                              </button>
+
+                              <button
+                                      class="delete-btn"
+                                      onclick="del('${c.id}')"
+                              >
+                                  Delete
+                              </button>
+
                           </div>
 
                       </div>
@@ -76,25 +404,32 @@
           });
   }
 
-  // ✅ DELETE
+  // DELETE
   function del(id) {
+
       fetch(`/contributors/delete/${id}`, {
+
           method: "DELETE"
       })
+
       .then(res => res.text())
+
       .then(msg => {
+
           alert(msg);
+
           loadContributors();
       });
   }
 
-  // ✅ GO TO EDIT
+  // EDIT
   function goEdit(id) {
-      window.location.href = `add-contributor.html?id=${id}`;
+
+      window.location.href =
+          `add-contributor.html?id=${id}`;
   }
 
 </script>
 
 </body>
 </html>
-

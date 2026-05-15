@@ -1,142 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit Contributor</title>
+
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
 <script>
+
+    // ADMIN GUARD
     if (localStorage.getItem("role") !== "ADMIN") {
+
         alert("Admins only!");
+
         window.location.href = "login.html";
     }
+
 </script>
 
 <div class="container">
 
     <h1>Edit Contributor</h1>
 
-    <!-- ✅ FORM -->
-
+    <!-- NAME -->
     <div class="form-group">
+
         <label>Name</label>
-        <input id="name" placeholder="Enter name">
+
+        <input
+                id="name"
+                placeholder="Enter contributor name"
+        >
+
     </div>
 
+    <!-- ROLE -->
     <div class="form-group">
+
         <label>Role</label>
+
         <select id="role">
+
             <option value="">Select Role</option>
+
             <option value="Actor">Actor</option>
+
             <option value="Director">Director</option>
+
+            <option value="Producer">Producer</option>
+
+            <option value="Writer">Writer</option>
+
         </select>
+
     </div>
 
+    <!-- AGE -->
     <div class="form-group">
+
         <label>Age</label>
-        <input id="age" type="number">
+
+        <input
+                id="age"
+                type="number"
+                placeholder="Enter age"
+        >
+
     </div>
 
+    <!-- COUNTRY -->
     <div class="form-group">
+
         <label>Country</label>
-        <input id="country">
+
+        <input
+                id="country"
+                placeholder="Enter country"
+        >
+
     </div>
 
-    <!-- ✅ ✅ NEW PHOTO FIELD -->
+    <!-- PHOTO -->
     <div class="form-group">
+
         <label>Photo URL</label>
-        <input id="photo" placeholder="https://image-link">
+
+        <input
+                id="photo"
+                placeholder="https://image-link"
+        >
+
     </div>
 
-    <!-- ✅ ACTIONS -->
-    <button onclick="updateContributor()">Update Contributor</button>
-    <button onclick="logout()">Logout</button>
+    <!-- DESCRIPTION -->
+    <div class="form-group">
 
+        <label>Description</label>
+
+        <textarea
+                id="description"
+                rows="4"
+                placeholder="Short biography..."
+        ></textarea>
+
+    </div>
+
+    <!-- AWARDS -->
+    <div class="form-group">
+
+        <label>Awards</label>
+
+        <input
+                id="awards"
+                placeholder="Oscar, Golden Globe..."
+        >
+
+    </div>
+
+    <!-- NOTABLE WORKS -->
+    <div class="form-group">
+
+        <label>Notable Works</label>
+
+        <input
+                id="notableWorks"
+                placeholder="Inception, Titanic..."
+        >
+
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="button-group">
+
+        <button onclick="updateContributor()">
+            Update Contributor
+        </button>
+
+        <button
+                class="logout-btn"
+                onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+    <!-- RESULT -->
     <div id="result"></div>
-
-    <!-- ✅ NAV -->
-    <div class="nav-buttons">
-        <button onclick="goBack()">⬅</button>
-    </div>
 
 </div>
 
 <script>
 
     const params = new URLSearchParams(window.location.search);
+
     const id = params.get("id");
 
-    // ✅ LOAD DATA
+    // LOAD CONTRIBUTOR
     function loadContributor() {
 
         fetch("/contributors/all")
+
             .then(res => res.json())
+
             .then(data => {
 
                 const c = data.find(x => x.id === id);
 
                 if (!c) {
-                    document.getElementById("result").innerText = "Contributor not found";
+
+                    document.getElementById("result").innerText =
+                        "Contributor not found";
+
                     return;
                 }
 
-                document.getElementById("name").value = c.name;
-                document.getElementById("role").value = c.role;
-                document.getElementById("age").value = c.age;
-                document.getElementById("country").value = c.country;
+                document.getElementById("name").value =
+                    c.name || "";
 
-                // ✅ LOAD PHOTO
-                document.getElementById("photo").value = c.photo || "";
+                document.getElementById("role").value =
+                    c.role || "";
+
+                document.getElementById("age").value =
+                    c.age || "";
+
+                document.getElementById("country").value =
+                    c.country || "";
+
+                document.getElementById("photo").value =
+                    c.photo || "";
+
+                document.getElementById("description").value =
+                    c.description || "";
+
+                document.getElementById("awards").value =
+                    c.awards || "";
+
+                document.getElementById("notableWorks").value =
+                    c.notableWorks || "";
             });
     }
 
-    // ✅ UPDATE
+    // UPDATE CONTRIBUTOR
     function updateContributor() {
 
         const updated = {
-            name: document.getElementById("name").value.trim(),
-            role: document.getElementById("role").value.trim(),
-            age: document.getElementById("age").value,
-            country: document.getElementById("country").value.trim(),
-            photo: document.getElementById("photo").value.trim()   // ✅ NEW
+
+            name:
+                document.getElementById("name")
+                .value
+                .trim(),
+
+            role:
+                document.getElementById("role")
+                .value
+                .trim(),
+
+            age:
+                document.getElementById("age")
+                .value,
+
+            country:
+                document.getElementById("country")
+                .value
+                .trim(),
+
+            photo:
+                document.getElementById("photo")
+                .value
+                .trim(),
+
+            description:
+                document.getElementById("description")
+                .value
+                .trim(),
+
+            awards:
+                document.getElementById("awards")
+                .value
+                .trim(),
+
+            notableWorks:
+                document.getElementById("notableWorks")
+                .value
+                .trim()
         };
 
-        // ✅ Validation
-        if (!updated.name || !updated.role || !updated.age || !updated.country) {
-            document.getElementById("result").innerText = "Please fill all fields";
+        if (
+            !updated.name ||
+            !updated.role ||
+            !updated.age ||
+            !updated.country
+        ) {
+
+            document.getElementById("result").innerText =
+                "Please fill all required fields";
+
             return;
         }
 
         fetch(`/contributors/update/${id}`, {
+
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
             body: JSON.stringify(updated)
+
         })
+
         .then(res => res.text())
+
         .then(msg => {
+
             alert(msg);
 
-            // ✅ Redirect after update
             window.location.href = "contributors.html";
         });
     }
 
-    // ✅ NAVIGATION
-    function goBack() {
-        window.location.href = "contributors.html";
-    }
-
-    // ✅ LOAD PAGE
-    loadContributor();
-
-    // ✅ LOGOUT
     function logout() {
+
         localStorage.clear();
+
         window.location.href = "login.html";
     }
+
+    loadContributor();
 
 </script>
 

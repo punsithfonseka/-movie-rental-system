@@ -1,49 +1,290 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
   <title>Add Movie</title>
+
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
+
+    body {
+
+        margin: 0;
+
+        padding: 0;
+
+        min-height: 100vh;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        font-family: "Poppins", Arial, sans-serif;
+
+        background:
+            linear-gradient(rgba(0,0,0,0.75),
+            rgba(0,0,0,0.92)),
+            url("/images/bg.jpg");
+
+        background-size: cover;
+
+        background-position: center;
+
+        color: white;
+    }
+
+    .container {
+
+        width: 100%;
+
+        max-width: 700px;
+
+        background: rgba(20,20,20,0.92);
+
+        backdrop-filter: blur(10px);
+
+        border-radius: 24px;
+
+        padding: 40px;
+
+        box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+
+        margin: 20px;
+    }
+
+    h1 {
+
+        text-align: center;
+
+        color: #f5c518;
+
+        margin-bottom: 8px;
+
+        font-size: 40px;
+    }
+
+    p {
+
+        text-align: center;
+
+        color: #ccc;
+
+        margin-bottom: 30px;
+    }
+
+    label {
+
+        display: block;
+
+        margin-top: 18px;
+
+        margin-bottom: 8px;
+
+        color: #f5c518;
+
+        font-weight: 600;
+    }
+
+    input,
+    select {
+
+        width: 100%;
+
+        padding: 14px 16px;
+
+        border: none;
+
+        border-radius: 16px;
+
+        background: rgba(255,255,255,0.08);
+
+        color: white;
+
+        font-size: 15px;
+
+        box-sizing: border-box;
+
+        transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+
+        outline: none;
+
+        background: rgba(255,255,255,0.12);
+
+        box-shadow: 0 0 10px rgba(245,197,24,0.5);
+    }
+
+    select[multiple] {
+
+        height: 160px;
+    }
+
+    option {
+
+        background: #111;
+
+        color: white;
+    }
+
     #preview {
-        margin-top: 10px;
+
+        margin-top: 15px;
+
         text-align: center;
     }
 
     #preview img {
-        width: 120px;
-        border-radius: 10px;
-        margin-top: 10px;
+
+        width: 180px;
+
+        border-radius: 16px;
+
+        border: 3px solid #f5c518;
+
+        box-shadow: 0 6px 18px rgba(0,0,0,0.5);
     }
+
+    button {
+
+        width: 100%;
+
+        padding: 14px;
+
+        border: none;
+
+        border-radius: 18px;
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        transition: 0.3s;
+
+        margin-top: 15px;
+    }
+
+    .add-btn {
+
+        background: linear-gradient(135deg,#f5c518,#ffd84d);
+
+        color: black;
+    }
+
+    .add-btn:hover {
+
+        transform: translateY(-2px);
+
+        background: white;
+    }
+
+    .logout-btn {
+
+        background: crimson;
+
+        color: white;
+    }
+
+    .logout-btn:hover {
+
+        transform: translateY(-2px);
+
+        background: red;
+    }
+
+    .nav-buttons {
+
+        display: flex;
+
+        gap: 15px;
+
+        margin-top: 25px;
+    }
+
+    .nav-buttons button {
+
+        margin-top: 0;
+
+        background: rgba(255,255,255,0.08);
+
+        color: white;
+    }
+
+    .nav-buttons button:hover {
+
+        background: rgba(255,255,255,0.15);
+    }
+
+    #result {
+
+        margin-top: 20px;
+
+        text-align: center;
+
+        color: #ffb3b3;
+
+        font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+
+        .container {
+
+            padding: 25px;
+        }
+
+        h1 {
+
+            font-size: 32px;
+        }
+
+        .nav-buttons {
+
+            flex-direction: column;
+        }
+    }
+
   </style>
+
 </head>
 
 <body>
 
 <script>
+
   if (localStorage.getItem("role") !== "ADMIN") {
+
       alert("Admins only");
+
       window.location.href = "login.html";
   }
+
 </script>
 
 <div class="container">
 
   <h1>Add Movie</h1>
-  <p>Admin only</p>
 
-  <div class="nav-buttons">
-    <button onclick="goBack()">Back</button>
-    <button onclick="goNext()">Next</button>
-  </div>
+  <p>Admin only</p>
 
   <label>Title</label>
   <input type="text" id="title" placeholder="Inception">
 
   <label>Poster URL</label>
-  <input type="text" id="poster"
-         placeholder="https://image-link"
-         oninput="previewImage()">
+  <input type="text" id="poster" placeholder="https://image-link" oninput="previewImage()">
 
   <div id="preview"></div>
 
@@ -53,8 +294,26 @@
   <label>Director</label>
   <select id="director"></select>
 
-  <button onclick="addMovie()">Add Movie</button>
-  <button onclick="logout()">Logout</button>
+  <button class="add-btn" onclick="addMovie()">
+    Add Movie
+  </button>
+
+  <button class="logout-btn" onclick="logout()">
+    Logout
+  </button>
+
+  <!-- ONLY ONE BACK/NEXT SECTION (BOTTOM) -->
+  <div class="nav-buttons">
+
+    <button onclick="goBack()">
+      ⬅ Back
+    </button>
+
+    <button onclick="goNext()">
+      Next ➡
+    </button>
+
+  </div>
 
   <div id="result"></div>
 
@@ -78,8 +337,11 @@
           .then(res => res.json())
           .then(data => {
 
-              const actorSelect = document.getElementById("actors");
-              const directorSelect = document.getElementById("director");
+              const actorSelect =
+                  document.getElementById("actors");
+
+              const directorSelect =
+                  document.getElementById("director");
 
               actorSelect.innerHTML = "";
               directorSelect.innerHTML = "";
@@ -87,40 +349,61 @@
               data.forEach(c => {
 
                   if (c.role === "Actor") {
-                      actorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+                      actorSelect.innerHTML += `
+                          <option value="${c.id}">
+                              ${c.name}
+                          </option>
+                      `;
                   }
 
                   if (c.role === "Director") {
-                      directorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+                      directorSelect.innerHTML += `
+                          <option value="${c.id}">
+                              ${c.name}
+                          </option>
+                      `;
                   }
               });
           });
   }
 
-  // ✅ FIXED PREVIEW FUNCTION
   function previewImage() {
 
-      const url = document.getElementById("poster").value;
-      const preview = document.getElementById("preview");
+      const url =
+          document.getElementById("poster").value;
+
+      const preview =
+          document.getElementById("preview");
 
       if (!url) {
           preview.innerHTML = "";
           return;
       }
 
-      preview.innerHTML = `${url}`;
+      preview.innerHTML = `
+          <img src="${url}"
+               onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'">
+      `;
   }
 
-  // ✅ ADD MOVIE
   function addMovie() {
 
-      const title = document.getElementById("title").value.trim();
-      const poster = document.getElementById("poster").value.trim();
+      const title =
+          document.getElementById("title").value.trim();
 
-      const actorSelect = document.getElementById("actors");
-      const directorId = document.getElementById("director").value;
+      const poster =
+          document.getElementById("poster").value.trim();
 
-      const contributors = Array.from(actorSelect.selectedOptions)
+      const actorSelect =
+          document.getElementById("actors");
+
+      const directorId =
+          document.getElementById("director").value;
+
+      const contributors =
+          Array.from(actorSelect.selectedOptions)
           .map(opt => ({ id: opt.value }));
 
       if (directorId) {
@@ -128,11 +411,15 @@
       }
 
       if (!title || contributors.length === 0) {
-          document.getElementById("result").innerText = "Please fill all fields";
+
+          document.getElementById("result").innerText =
+              "Please fill all fields";
+
           return;
       }
 
       const movie = {
+
           movieId: "M" + Math.floor(Math.random() * 1000),
           title: title,
           year: 2024,
@@ -142,11 +429,10 @@
 
       fetch("/movies/add", {
           method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(movie)
       })
+
       .then(res => res.text())
       .then(data => {
 
@@ -169,4 +455,5 @@
 </script>
 
 </body>
+
 </html>
