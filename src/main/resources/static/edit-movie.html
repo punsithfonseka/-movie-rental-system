@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Movies</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.92)),
+                        url("/images/bg.jpg");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        /* CONTAINER */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(20,20,20,0.92);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+        }
+
+        /* TITLE */
+        h1 {
+            text-align: center;
+            color: #f5c518;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 300px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: none;
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(245,197,24,0.5);
+        }
+
+        /* NAV BUTTONS */
+        .nav-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btns button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            transition: 0.3s;
+        }
+
+        .nav-btns button:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* LIST */
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* CARD */
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 18px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* BUTTONS */
+        .btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .edit {
+            background: linear-gradient(135deg,#f5c518,#ffd84d);
+            color: black;
+        }
+
+        .delete {
+            background: crimson;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎬 Edit Movies</h1>
+
+    <div class="top-bar">
+
+        <div class="nav-btns">
+            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="goNext()">Next ➡</button>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search movie..." onkeyup="filterMovies()">
+        </div>
+
+    </div>
+
+    <div class="list" id="movieList"></div>
+
+</div>
+
+<script>
+
+    let moviesData = [];
+
+    document.addEventListener("DOMContentLoaded", loadMovies);
+
+    async function loadMovies() {
+        const res = await fetch("/movies/all");
+        moviesData = await res.json();
+        renderMovies(moviesData);
+    }
+
+    function renderMovies(data) {
+
+        const list = document.getElementById("movieList");
+        list.innerHTML = "";
+
+        data.forEach(movie => {
+
+            list.innerHTML += `
+                <div class="card">
+
+                    <div>
+                        <h3>${movie.title}</h3>
+                        <small>${movie.year || 'N/A'}</small>
+                    </div>
+
+                    <div class="btns">
+
+                        <button class="edit"
+                            onclick="editMovie('${movie.movieId}')">
+                            Edit
+                        </button>
+
+                        <button class="delete"
+                            onclick="deleteMovie('${movie.movieId}')">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+        });
+    }
+
+    function filterMovies() {
+
+        const value = document.getElementById("search").value.toLowerCase();
+
+        const filtered = moviesData.filter(m =>
+            m.title.toLowerCase().includes(value)
+        );
+
+        renderMovies(filtered);
+    }
+
+    function editMovie(id) {
+        window.location.href = "edit-movie-form.html?id=" + id;
+    }
+
+    async function deleteMovie(id) {
+
+        if (!confirm("Are you sure?")) return;
+
+        await fetch("/movies/delete/" + id, {
+            method: "DELETE"
+        });
+
+        loadMovies();
+    }
+
+    function goBack() {
+        window.location.href = "add-movie.html";
+    }
+
+    function goNext() {
+        window.location.href = "contributors.html";
+    }
+
+</script>
+
+</body>
+</html>

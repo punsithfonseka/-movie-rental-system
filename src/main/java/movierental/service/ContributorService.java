@@ -59,7 +59,7 @@ public class ContributorService {
         // ✅ update ALL fields safely
         existing.setName(updatedContributor.getName());
         existing.setRole(updatedContributor.getRole());
-        existing.setAge(updatedContributor.getAge());
+        existing.setDateOfBirth(updatedContributor.getDateOfBirth());
         existing.setCountry(updatedContributor.getCountry());
         existing.setPhoto(updatedContributor.getPhoto());
 

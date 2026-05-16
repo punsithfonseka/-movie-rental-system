@@ -2,6 +2,7 @@ package movierental.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Contributor {
@@ -11,7 +12,7 @@ public class Contributor {
 
     private String name;
     private String role;
-    private int age;
+    private LocalDate dateOfBirth;
     private String country;
 
     // PHOTO
@@ -41,7 +42,6 @@ public class Contributor {
         this.id = id;
         this.name = name;
         this.role = role;
-        this.age = age;
         this.country = country;
         this.photo = photo;
         this.description = description;
@@ -75,15 +75,6 @@ public class Contributor {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    // AGE
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     // COUNTRY
@@ -130,4 +121,12 @@ public class Contributor {
     public void setNotableWorks(String notableWorks) {
         this.notableWorks = notableWorks;
     }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
 }

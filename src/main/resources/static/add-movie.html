@@ -17,15 +17,11 @@
     body {
 
         margin: 0;
-
         padding: 0;
-
         min-height: 100vh;
 
         display: flex;
-
         justify-content: center;
-
         align-items: center;
 
         font-family: "Poppins", Arial, sans-serif;
@@ -36,7 +32,6 @@
             url("/images/bg.jpg");
 
         background-size: cover;
-
         background-position: center;
 
         color: white;
@@ -45,15 +40,12 @@
     .container {
 
         width: 100%;
-
         max-width: 700px;
 
         background: rgba(20,20,20,0.92);
-
         backdrop-filter: blur(10px);
 
         border-radius: 24px;
-
         padding: 40px;
 
         box-shadow: 0 10px 40px rgba(0,0,0,0.7);
@@ -64,33 +56,25 @@
     h1 {
 
         text-align: center;
-
         color: #f5c518;
-
         margin-bottom: 8px;
-
         font-size: 40px;
     }
 
     p {
 
         text-align: center;
-
         color: #ccc;
-
         margin-bottom: 30px;
     }
 
     label {
 
         display: block;
-
         margin-top: 18px;
-
         margin-bottom: 8px;
 
         color: #f5c518;
-
         font-weight: 600;
     }
 
@@ -98,19 +82,15 @@
     select {
 
         width: 100%;
-
         padding: 14px 16px;
 
         border: none;
-
         border-radius: 16px;
 
         background: rgba(255,255,255,0.08);
-
         color: white;
 
         font-size: 15px;
-
         box-sizing: border-box;
 
         transition: 0.3s;
@@ -120,58 +100,32 @@
     select:focus {
 
         outline: none;
-
         background: rgba(255,255,255,0.12);
 
         box-shadow: 0 0 10px rgba(245,197,24,0.5);
     }
 
     select[multiple] {
-
         height: 160px;
     }
 
     option {
-
         background: #111;
-
         color: white;
-    }
-
-    #preview {
-
-        margin-top: 15px;
-
-        text-align: center;
-    }
-
-    #preview img {
-
-        width: 180px;
-
-        border-radius: 16px;
-
-        border: 3px solid #f5c518;
-
-        box-shadow: 0 6px 18px rgba(0,0,0,0.5);
     }
 
     button {
 
         width: 100%;
-
         padding: 14px;
 
         border: none;
-
         border-radius: 18px;
 
         font-size: 15px;
-
         font-weight: bold;
 
         cursor: pointer;
-
         transition: 0.3s;
 
         margin-top: 15px;
@@ -180,35 +134,28 @@
     .add-btn {
 
         background: linear-gradient(135deg,#f5c518,#ffd84d);
-
         color: black;
     }
 
     .add-btn:hover {
-
         transform: translateY(-2px);
-
         background: white;
     }
 
     .logout-btn {
 
         background: crimson;
-
         color: white;
     }
 
     .logout-btn:hover {
-
         transform: translateY(-2px);
-
         background: red;
     }
 
     .nav-buttons {
 
         display: flex;
-
         gap: 15px;
 
         margin-top: 25px;
@@ -217,42 +164,34 @@
     .nav-buttons button {
 
         margin-top: 0;
-
         background: rgba(255,255,255,0.08);
-
         color: white;
     }
 
     .nav-buttons button:hover {
-
         background: rgba(255,255,255,0.15);
     }
 
     #result {
 
         margin-top: 20px;
-
         text-align: center;
 
         color: #ffb3b3;
-
         font-weight: bold;
     }
 
     @media (max-width: 768px) {
 
         .container {
-
             padding: 25px;
         }
 
         h1 {
-
             font-size: 32px;
         }
 
         .nav-buttons {
-
             flex-direction: column;
         }
     }
@@ -266,9 +205,7 @@
 <script>
 
   if (localStorage.getItem("role") !== "ADMIN") {
-
       alert("Admins only");
-
       window.location.href = "login.html";
   }
 
@@ -277,16 +214,10 @@
 <div class="container">
 
   <h1>Add Movie</h1>
-
   <p>Admin only</p>
 
   <label>Title</label>
   <input type="text" id="title" placeholder="Inception">
-
-  <label>Poster URL</label>
-  <input type="text" id="poster" placeholder="https://image-link" oninput="previewImage()">
-
-  <div id="preview"></div>
 
   <label>Actors (Hold Ctrl to select multiple)</label>
   <select id="actors" multiple></select>
@@ -302,7 +233,6 @@
     Logout
   </button>
 
-  <!-- ONLY ONE BACK/NEXT SECTION (BOTTOM) -->
   <div class="nav-buttons">
 
     <button onclick="goBack()">
@@ -326,7 +256,7 @@
   }
 
   function goNext() {
-      window.location.href = "/contributors.html";
+      window.location.href = "/edit-movie.html";
   }
 
   document.addEventListener("DOMContentLoaded", loadContributors);
@@ -349,7 +279,6 @@
               data.forEach(c => {
 
                   if (c.role === "Actor") {
-
                       actorSelect.innerHTML += `
                           <option value="${c.id}">
                               ${c.name}
@@ -358,7 +287,6 @@
                   }
 
                   if (c.role === "Director") {
-
                       directorSelect.innerHTML += `
                           <option value="${c.id}">
                               ${c.name}
@@ -369,32 +297,10 @@
           });
   }
 
-  function previewImage() {
-
-      const url =
-          document.getElementById("poster").value;
-
-      const preview =
-          document.getElementById("preview");
-
-      if (!url) {
-          preview.innerHTML = "";
-          return;
-      }
-
-      preview.innerHTML = `
-          <img src="${url}"
-               onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'">
-      `;
-  }
-
   function addMovie() {
 
       const title =
           document.getElementById("title").value.trim();
-
-      const poster =
-          document.getElementById("poster").value.trim();
 
       const actorSelect =
           document.getElementById("actors");
@@ -423,7 +329,6 @@
           movieId: "M" + Math.floor(Math.random() * 1000),
           title: title,
           year: 2024,
-          poster: poster,
           contributors: contributors
       };
 
@@ -439,8 +344,6 @@
           document.getElementById("result").innerText = data;
 
           document.getElementById("title").value = "";
-          document.getElementById("poster").value = "";
-          document.getElementById("preview").innerHTML = "";
 
           actorSelect.selectedIndex = -1;
           document.getElementById("director").selectedIndex = 0;
@@ -455,5 +358,4 @@
 </script>
 
 </body>
-
 </html>

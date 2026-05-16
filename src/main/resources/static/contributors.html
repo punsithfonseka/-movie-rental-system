@@ -49,8 +49,6 @@
         font-size: 42px;
     }
 
-    /* BUTTONS */
-
     .top-buttons {
 
         display: flex;
@@ -94,8 +92,6 @@
         transform: scale(1.03);
     }
 
-    /* LIST */
-
     #list {
 
         list-style: none;
@@ -109,8 +105,6 @@
 
         gap: 25px;
     }
-
-    /* CARD */
 
     .card {
 
@@ -132,8 +126,6 @@
         background: rgba(255,255,255,0.1);
     }
 
-    /* IMAGE */
-
     .avatar {
 
         width: 120px;
@@ -153,8 +145,6 @@
         margin-bottom: 20px;
     }
 
-    /* TEXT */
-
     .card h3 {
 
         text-align: center;
@@ -171,16 +161,12 @@
         line-height: 1.5;
     }
 
-    /* LABELS */
-
     .label {
 
         color: #f5c518;
 
         font-weight: bold;
     }
-
-    /* ACTION BUTTONS */
 
     .actions {
 
@@ -226,8 +212,6 @@
 
         transform: scale(1.03);
     }
-
-    /* RESPONSIVE */
 
     @media (max-width: 768px) {
 
@@ -293,7 +277,18 @@
   // BACK
   function goBack() {
 
-      window.location.href = "add-movie.html";
+      window.location.href = "edit-movie.html";
+  }
+
+  // ESCAPE HTML
+  function escapeHtml(text) {
+
+      return (text || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
   }
 
   // LOAD CONTRIBUTORS
@@ -310,6 +305,19 @@
 
               list.innerHTML = "";
 
+              // EMPTY CHECK
+              if (!data || data.length === 0) {
+
+                  list.innerHTML = `
+
+                      <p style="text-align:center;">
+                          No contributors found
+                      </p>
+                  `;
+
+                  return;
+              }
+
               data.forEach(c => {
 
                   const li =
@@ -320,30 +328,36 @@
                       <div class="card">
 
                           <img
-                              src="${c.photo}"
+                              src="${
+                                  c.photo ||
+                                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                              }"
+
                               class="avatar"
 
                               onerror="
-                              this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                                  this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
                               "
                           >
 
-                          <h3>${c.name}</h3>
+                          <h3>
+                              ${escapeHtml(c.name)}
+                          </h3>
 
                           <p>
                               <span class="label">
                                   Role:
                               </span>
 
-                              ${c.role}
+                              ${escapeHtml(c.role)}
                           </p>
 
                           <p>
                               <span class="label">
-                                  Age:
+                                  Date Of Birth:
                               </span>
 
-                              ${c.age}
+                              ${c.dateOfBirth || "N/A"}
                           </p>
 
                           <p>
@@ -351,7 +365,7 @@
                                   Country:
                               </span>
 
-                              ${c.country}
+                              ${escapeHtml(c.country)}
                           </p>
 
                           <p>
@@ -359,7 +373,12 @@
                                   Description:
                               </span>
 
-                              ${c.description || "No description available"}
+                              ${
+                                  escapeHtml(
+                                      c.description ||
+                                      "No description available"
+                                  )
+                              }
                           </p>
 
                           <p>
@@ -367,7 +386,12 @@
                                   Awards:
                               </span>
 
-                              ${c.awards || "No awards listed"}
+                              ${
+                                  escapeHtml(
+                                      c.awards ||
+                                      "No awards listed"
+                                  )
+                              }
                           </p>
 
                           <p>
@@ -375,13 +399,19 @@
                                   Notable Works:
                               </span>
 
-                              ${c.notableWorks || "No works listed"}
+                              ${
+                                  escapeHtml(
+                                      c.notableWorks ||
+                                      "No works listed"
+                                  )
+                              }
                           </p>
 
                           <div class="actions">
 
                               <button
                                       class="edit-btn"
+
                                       onclick="goEdit('${c.id}')"
                               >
                                   Edit
@@ -389,6 +419,7 @@
 
                               <button
                                       class="delete-btn"
+
                                       onclick="del('${c.id}')"
                               >
                                   Delete
@@ -401,11 +432,28 @@
 
                   list.appendChild(li);
               });
+          })
+
+          .catch(err => {
+
+              console.error(
+                  "Load failed:",
+                  err
+              );
+
+              alert("Failed to load contributors");
           });
   }
 
   // DELETE
   function del(id) {
+
+      const confirmDelete =
+          confirm(
+              "Are you sure you want to delete this contributor?"
+          );
+
+      if (!confirmDelete) return;
 
       fetch(`/contributors/delete/${id}`, {
 
@@ -419,6 +467,16 @@
           alert(msg);
 
           loadContributors();
+      })
+
+      .catch(err => {
+
+          console.error(
+              "Delete failed:",
+              err
+          );
+
+          alert("Delete failed");
       });
   }
 
@@ -428,6 +486,9 @@
       window.location.href =
           `add-contributor.html?id=${id}`;
   }
+
+  // AUTO LOAD
+  loadContributors();
 
 </script>
 
