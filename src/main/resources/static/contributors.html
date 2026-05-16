@@ -16,214 +16,184 @@
 
     body {
 
-        background: #111;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+
+        font-family: "Poppins", Arial, sans-serif;
+
+        background:
+            linear-gradient(
+                rgba(0,0,0,0.75),
+                rgba(0,0,0,0.92)
+            ),
+            url("/images/bg.jpg");
+
+        background-size: cover;
+        background-position: center;
 
         color: white;
-
-        font-family: Arial, sans-serif;
-
-        margin: 0;
-
-        padding: 0;
     }
 
     .container {
-
         width: 90%;
-
-        max-width: 1200px;
-
+        max-width: 1300px;
         margin: auto;
-
         padding: 30px;
     }
 
     h1 {
-
         text-align: center;
-
         color: #f5c518;
-
         margin-bottom: 30px;
+        font-size: 46px;
+        letter-spacing: 1px;
+    }
 
-        font-size: 42px;
+    .top-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 35px;
     }
 
     .top-buttons {
-
         display: flex;
-
         gap: 15px;
-
-        margin-bottom: 30px;
+        align-items: center;
     }
 
     .top-buttons button {
-
-        padding: 12px 20px;
-
+        padding: 13px 22px;
         border: none;
-
-        border-radius: 25px;
-
+        border-radius: 18px;
         cursor: pointer;
-
         font-weight: bold;
-
         transition: 0.3s;
+        font-size: 15px;
     }
 
     .load-btn {
-
-        background: #f5c518;
-
+        background: linear-gradient(135deg,#f5c518,#ffd84d);
         color: black;
     }
 
     .back-btn {
+        background: rgba(255,255,255,0.08);
+        color: white;
+    }
 
+    .logout-btn {
         background: crimson;
-
         color: white;
     }
 
     .top-buttons button:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+    }
 
-        transform: scale(1.03);
+    .search-box {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .search-box input {
+        width: 320px;
+        padding: 14px 18px;
+        border: none;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.08);
+        color: white;
+        font-size: 15px;
+        outline: none;
     }
 
     #list {
-
         list-style: none;
-
         padding: 0;
-
         display: grid;
-
-        grid-template-columns:
-            repeat(auto-fit, minmax(320px, 1fr));
-
-        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 30px;
     }
 
     .card {
-
-        background: rgba(255,255,255,0.07);
-
-        padding: 25px;
-
-        border-radius: 20px;
-
+        background: rgba(255,255,255,0.06);
+        backdrop-filter: blur(10px);
+        padding: 28px;
+        border-radius: 24px;
         transition: 0.3s;
-
-        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.45);
     }
 
     .card:hover {
-
-        transform: translateY(-5px);
-
-        background: rgba(255,255,255,0.1);
+        transform: translateY(-6px);
     }
 
     .avatar {
-
-        width: 120px;
-
-        height: 120px;
-
+        width: 130px;
+        height: 130px;
         border-radius: 50%;
-
         object-fit: cover;
-
         display: block;
-
         margin: auto;
-
-        border: 3px solid #f5c518;
-
-        margin-bottom: 20px;
+        border: 4px solid #f5c518;
+        margin-bottom: 22px;
     }
 
     .card h3 {
-
         text-align: center;
-
         color: #f5c518;
-
-        margin-bottom: 15px;
+        margin-bottom: 18px;
+        font-size: 28px;
     }
 
     .card p {
-
-        margin-bottom: 10px;
-
-        line-height: 1.5;
+        margin-bottom: 12px;
+        line-height: 1.6;
+        color: #ddd;
+        font-size: 15px;
     }
 
     .label {
-
         color: #f5c518;
-
         font-weight: bold;
     }
 
     .actions {
-
         display: flex;
-
-        gap: 10px;
-
-        margin-top: 20px;
+        gap: 12px;
+        margin-top: 24px;
     }
 
     .actions button {
-
         flex: 1;
-
-        padding: 12px;
-
+        padding: 13px;
         border: none;
-
-        border-radius: 25px;
-
+        border-radius: 16px;
         cursor: pointer;
-
         font-weight: bold;
-
         transition: 0.3s;
     }
 
     .edit-btn {
-
-        background: #f5c518;
-
+        background: linear-gradient(135deg,#f5c518,#ffd84d);
         color: black;
     }
 
     .delete-btn {
-
         background: crimson;
-
         color: white;
     }
 
-    .actions button:hover {
-
-        transform: scale(1.03);
-    }
-
-    @media (max-width: 768px) {
-
-        .top-buttons {
-
-            flex-direction: column;
-        }
-
-        h1 {
-
-            font-size: 32px;
-        }
+    .desc-toggle {
+        color: #f5c518;
+        margin-left: 8px;
+        cursor: pointer;
+        font-size: 14px;
     }
 
   </style>
@@ -233,56 +203,57 @@
 <body>
 
 <script>
-
-  // ADMIN GUARD
   if (localStorage.getItem("role") !== "ADMIN") {
-
       alert("Admins only!");
-
       window.location.href = "login.html";
   }
-
 </script>
 
 <div class="container">
 
-  <h1>Contributor Profiles</h1>
+  <h1>🎭 Contributor Profiles</h1>
 
-  <!-- TOP BUTTONS -->
-  <div class="top-buttons">
+  <div class="top-section">
 
-    <button
-            class="back-btn"
-            onclick="goBack()"
-    >
-      Back
-    </button>
+    <div class="top-buttons">
 
-    <button
-            class="load-btn"
-            onclick="loadContributors()"
-    >
-      Load Contributors
-    </button>
+      <button class="back-btn" onclick="goBack()">⬅ Back</button>
+
+      <button class="load-btn" onclick="loadContributors()">Load Contributors</button>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+
+    </div>
+
+    <div class="search-box">
+
+      <input type="text"
+             id="search"
+             placeholder="Search contributors..."
+             onkeyup="filterContributors()">
+
+    </div>
 
   </div>
 
-  <!-- LIST -->
   <ul id="list"></ul>
 
 </div>
 
 <script>
 
-  // BACK
-  function goBack() {
+  let contributorsData = [];
 
+  function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+  }
+
+  function goBack() {
       window.location.href = "edit-movie.html";
   }
 
-  // ESCAPE HTML
   function escapeHtml(text) {
-
       return (text || "")
           .replaceAll("&", "&amp;")
           .replaceAll("<", "&lt;")
@@ -291,203 +262,135 @@
           .replaceAll("'", "&#039;");
   }
 
-  // LOAD CONTRIBUTORS
   function loadContributors() {
 
       fetch("/contributors/all")
-
           .then(res => res.json())
-
           .then(data => {
-
-              const list =
-                  document.getElementById("list");
-
-              list.innerHTML = "";
-
-              // EMPTY CHECK
-              if (!data || data.length === 0) {
-
-                  list.innerHTML = `
-
-                      <p style="text-align:center;">
-                          No contributors found
-                      </p>
-                  `;
-
-                  return;
-              }
-
-              data.forEach(c => {
-
-                  const li =
-                      document.createElement("li");
-
-                  li.innerHTML = `
-
-                      <div class="card">
-
-                          <img
-                              src="${
-                                  c.photo ||
-                                  'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
-                              }"
-
-                              class="avatar"
-
-                              onerror="
-                                  this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
-                              "
-                          >
-
-                          <h3>
-                              ${escapeHtml(c.name)}
-                          </h3>
-
-                          <p>
-                              <span class="label">
-                                  Role:
-                              </span>
-
-                              ${escapeHtml(c.role)}
-                          </p>
-
-                          <p>
-                              <span class="label">
-                                  Date Of Birth:
-                              </span>
-
-                              ${c.dateOfBirth || "N/A"}
-                          </p>
-
-                          <p>
-                              <span class="label">
-                                  Country:
-                              </span>
-
-                              ${escapeHtml(c.country)}
-                          </p>
-
-                          <p>
-                              <span class="label">
-                                  Description:
-                              </span>
-
-                              ${
-                                  escapeHtml(
-                                      c.description ||
-                                      "No description available"
-                                  )
-                              }
-                          </p>
-
-                          <p>
-                              <span class="label">
-                                  Awards:
-                              </span>
-
-                              ${
-                                  escapeHtml(
-                                      c.awards ||
-                                      "No awards listed"
-                                  )
-                              }
-                          </p>
-
-                          <p>
-                              <span class="label">
-                                  Notable Works:
-                              </span>
-
-                              ${
-                                  escapeHtml(
-                                      c.notableWorks ||
-                                      "No works listed"
-                                  )
-                              }
-                          </p>
-
-                          <div class="actions">
-
-                              <button
-                                      class="edit-btn"
-
-                                      onclick="goEdit('${c.id}')"
-                              >
-                                  Edit
-                              </button>
-
-                              <button
-                                      class="delete-btn"
-
-                                      onclick="del('${c.id}')"
-                              >
-                                  Delete
-                              </button>
-
-                          </div>
-
-                      </div>
-                  `;
-
-                  list.appendChild(li);
-              });
+              contributorsData = data;
+              renderContributors(data);
           })
-
           .catch(err => {
-
-              console.error(
-                  "Load failed:",
-                  err
-              );
-
+              console.error(err);
               alert("Failed to load contributors");
           });
   }
 
-  // DELETE
-  function del(id) {
+  function renderContributors(data) {
 
-      const confirmDelete =
-          confirm(
-              "Are you sure you want to delete this contributor?"
-          );
+      const list = document.getElementById("list");
+      list.innerHTML = "";
 
-      if (!confirmDelete) return;
+      if (!data || data.length === 0) {
+          list.innerHTML = `<p style="text-align:center;color:#bbb;font-size:18px;">No contributors found</p>`;
+          return;
+      }
 
-      fetch(`/contributors/delete/${id}`, {
+      data.forEach(c => {
 
-          method: "DELETE"
-      })
+          const fullDesc = c.description || "No description available";
 
-      .then(res => res.text())
+          const shortDesc =
+              fullDesc.length > 120
+                  ? fullDesc.substring(0, 120) + "..."
+                  : fullDesc;
 
-      .then(msg => {
+          const li = document.createElement("li");
 
-          alert(msg);
+          li.innerHTML = `
+              <div class="card">
 
-          loadContributors();
-      })
+                  <img src="${
+                      c.photo ||
+                      'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                  }" class="avatar">
 
-      .catch(err => {
+                  <h3>${escapeHtml(c.name)}</h3>
 
-          console.error(
-              "Delete failed:",
-              err
-          );
+                  <p><span class="label">Role:</span> ${escapeHtml(c.role)}</p>
 
-          alert("Delete failed");
+                  <p><span class="label">Date Of Birth:</span> ${c.dateOfBirth || "N/A"}</p>
+
+                  <p><span class="label">Country:</span> ${escapeHtml(c.country)}</p>
+
+                  <p>
+                      <span class="label">Description:</span>
+                      <span id="desc-${c.id}">
+                          ${escapeHtml(shortDesc)}
+                      </span>
+
+                      ${
+                          fullDesc.length > 120
+                          ? `<span class="desc-toggle"
+                                   onclick="toggleDesc(event, '${c.id}', \`${escapeHtml(fullDesc)}\`, \`${escapeHtml(shortDesc)}\`)">
+                                   See more
+                             </span>`
+                          : ""
+                      }
+                  </p>
+
+                  <p><span class="label">Awards:</span> ${escapeHtml(c.awards || "No awards listed")}</p>
+
+                  <p><span class="label">Notable Works:</span> ${escapeHtml(c.notableWorks || "No works listed")}</p>
+
+                  <div class="actions">
+
+                      <button class="edit-btn" onclick="goEdit('${c.id}')">Edit</button>
+
+                      <button class="delete-btn" onclick="del('${c.id}')">Delete</button>
+
+                  </div>
+
+              </div>
+          `;
+
+          list.appendChild(li);
       });
   }
 
-  // EDIT
-  function goEdit(id) {
+  function toggleDesc(event, id, fullText, shortText) {
 
-      window.location.href =
-          `add-contributor.html?id=${id}`;
+      event.preventDefault();
+
+      const el = document.getElementById("desc-" + id);
+      const link = event.target;
+
+      if (link.innerText === "See more") {
+          el.innerText = fullText;
+          link.innerText = "See less";
+      } else {
+          el.innerText = shortText;
+          link.innerText = "See more";
+      }
   }
 
-  // AUTO LOAD
+  function filterContributors() {
+
+      const value = document.getElementById("search").value.toLowerCase();
+
+      const filtered = contributorsData.filter(c =>
+          c.name.toLowerCase().includes(value)
+      );
+
+      renderContributors(filtered);
+  }
+
+  function del(id) {
+
+      if (!confirm("Are you sure you want to delete this contributor?")) return;
+
+      fetch(`/contributors/delete/${id}`, { method: "DELETE" })
+          .then(res => res.text())
+          .then(msg => {
+              alert(msg);
+              loadContributors();
+          });
+  }
+
+  function goEdit(id) {
+      window.location.href = `add-contributor.html?id=${id}`;
+  }
+
   loadContributors();
 
 </script>

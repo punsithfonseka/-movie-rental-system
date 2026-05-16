@@ -2,8 +2,11 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Edit Movies</title>
 
     <style>
@@ -12,112 +15,152 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+
             font-family: "Poppins", Arial, sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.92)),
-                        url("/images/bg.jpg");
+
+            background:
+                linear-gradient(
+                    rgba(0,0,0,0.75),
+                    rgba(0,0,0,0.92)
+                ),
+                url("/images/bg.jpg");
+
             background-size: cover;
             background-position: center;
+
             color: white;
         }
 
-        /* CONTAINER */
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
+
             margin: 30px auto;
             padding: 30px;
+
             background: rgba(20,20,20,0.92);
+
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.7);
         }
 
-        /* TITLE */
         h1 {
             text-align: center;
             color: #f5c518;
-            font-size: 40px;
-            margin-bottom: 10px;
+            font-size: 42px;
+            margin-bottom: 25px;
         }
 
-        /* TOP BAR */
         .top-bar {
+
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .search-box input {
             width: 300px;
-            padding: 12px 14px;
-            border-radius: 16px;
+            padding: 12px 15px;
             border: none;
+            border-radius: 16px;
             background: rgba(255,255,255,0.08);
             color: white;
+            font-size: 15px;
         }
 
         .search-box input:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(245,197,24,0.5);
+            box-shadow: 0 0 12px rgba(245,197,24,0.5);
         }
 
-        /* NAV BUTTONS */
         .nav-btns {
             display: flex;
             gap: 10px;
         }
 
+        /* 🔼 UPDATED: Bigger Back/Next buttons */
         .nav-btns button {
-            padding: 10px 14px;
+            padding: 14px 20px;
             border: none;
             border-radius: 16px;
             cursor: pointer;
             background: rgba(255,255,255,0.08);
             color: white;
             transition: 0.3s;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .nav-btns button:hover {
             background: rgba(255,255,255,0.15);
         }
 
-        /* LIST */
-        .list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        /* 🔴 UPDATED: Stronger red logout button */
+        .logout-btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: #e60000;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 15px;
         }
 
-        /* CARD */
+        .logout-btn:hover {
+            transform: scale(1.05);
+            background: #ff1a1a;
+        }
+
+        .list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
         .card {
             background: rgba(255,255,255,0.05);
-            padding: 18px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 24px;
+            overflow: hidden;
             transition: 0.3s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
         .card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-6px);
             background: rgba(255,255,255,0.08);
         }
 
-        /* BUTTONS */
-        .btns {
-            display: flex;
-            gap: 10px;
+        .banner {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
         }
 
-        button {
-            padding: 10px 14px;
+        .card-content {
+            padding: 18px;
+        }
+
+        .btns {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btns button {
+            flex: 1;
+            padding: 12px;
             border: none;
             border-radius: 14px;
-            cursor: pointer;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
         .edit {
@@ -131,6 +174,7 @@
         }
 
     </style>
+
 </head>
 
 <body>
@@ -142,12 +186,23 @@
     <div class="top-bar">
 
         <div class="nav-btns">
+
             <button onclick="goBack()">⬅ Back</button>
             <button onclick="goNext()">Next ➡</button>
+
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+
         </div>
 
         <div class="search-box">
-            <input type="text" id="search" placeholder="Search movie..." onkeyup="filterMovies()">
+
+            <input type="text"
+                   id="search"
+                   placeholder="Search movie..."
+                   onkeyup="filterMovies()">
+
         </div>
 
     </div>
@@ -163,9 +218,15 @@
     document.addEventListener("DOMContentLoaded", loadMovies);
 
     async function loadMovies() {
-        const res = await fetch("/movies/all");
-        moviesData = await res.json();
-        renderMovies(moviesData);
+
+        try {
+            const res = await fetch("/movies/all");
+            moviesData = await res.json();
+            renderMovies(moviesData);
+        } catch (error) {
+            console.error(error);
+            alert("Failed to load movies.");
+        }
     }
 
     function renderMovies(data) {
@@ -173,27 +234,38 @@
         const list = document.getElementById("movieList");
         list.innerHTML = "";
 
+        if (data.length === 0) {
+            list.innerHTML = `<p style="text-align:center;color:#bbb;font-size:18px;">No movies found</p>`;
+            return;
+        }
+
         data.forEach(movie => {
 
             list.innerHTML += `
                 <div class="card">
 
-                    <div>
+                    <img class="banner"
+                         src="${movie.banner || '/images/default-banner.jpg'}"
+                         alt="Movie Banner">
+
+                    <div class="card-content">
+
                         <h3>${movie.title}</h3>
                         <small>${movie.year || 'N/A'}</small>
-                    </div>
 
-                    <div class="btns">
+                        <div class="btns">
 
-                        <button class="edit"
-                            onclick="editMovie('${movie.movieId}')">
-                            Edit
-                        </button>
+                            <button class="edit"
+                                onclick="editMovie('${movie.movieId}')">
+                                Edit
+                            </button>
 
-                        <button class="delete"
-                            onclick="deleteMovie('${movie.movieId}')">
-                            Delete
-                        </button>
+                            <button class="delete"
+                                onclick="deleteMovie('${movie.movieId}')">
+                                Delete
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -206,8 +278,8 @@
 
         const value = document.getElementById("search").value.toLowerCase();
 
-        const filtered = moviesData.filter(m =>
-            m.title.toLowerCase().includes(value)
+        const filtered = moviesData.filter(movie =>
+            movie.title.toLowerCase().includes(value)
         );
 
         renderMovies(filtered);
@@ -219,13 +291,16 @@
 
     async function deleteMovie(id) {
 
-        if (!confirm("Are you sure?")) return;
+        const confirmDelete = confirm("Are you sure you want to delete this movie?");
+        if (!confirmDelete) return;
 
-        await fetch("/movies/delete/" + id, {
-            method: "DELETE"
-        });
-
-        loadMovies();
+        try {
+            await fetch("/movies/delete/" + id, { method: "DELETE" });
+            loadMovies();
+        } catch (error) {
+            console.error(error);
+            alert("Failed to delete movie.");
+        }
     }
 
     function goBack() {
@@ -234,6 +309,11 @@
 
     function goNext() {
         window.location.href = "contributors.html";
+    }
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = "login.html";
     }
 
 </script>

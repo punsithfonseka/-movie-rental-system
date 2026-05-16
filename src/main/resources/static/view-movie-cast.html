@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -12,163 +13,384 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <style>
-        /* (your CSS unchanged — kept exactly as you wrote it) */
 
         body {
+
             font-family: Arial, sans-serif;
+
             background:
                 linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
                 url("/images/bg.jpg");
+
             background-size: cover;
             background-position: center;
+
             color: white;
+
             margin: 0;
             padding: 0;
+
             min-height: 100vh;
         }
 
         .container {
+
             width: 90%;
-            max-width: 1000px;
+            max-width: 1200px;
+
             margin: auto;
             padding: 30px;
         }
 
         h1 {
+
             text-align: center;
+
             color: #f5c518;
-            font-size: 48px;
+
+            font-size: 52px;
+
             margin-bottom: 30px;
         }
 
+        /* SEARCH */
+
         #searchBox {
+
             position: relative;
-            margin-bottom: 25px;
+
+            margin-bottom: 30px;
         }
 
         #search {
+
             width: 100%;
-            padding: 16px;
+
+            padding: 18px;
+
             border-radius: 40px;
+
             border: none;
-            background: rgba(0,0,0,0.8);
+
+            background: rgba(0,0,0,0.85);
+
             color: white;
-            font-size: 16px;
+
+            font-size: 17px;
+
+            box-sizing: border-box;
         }
 
         #search:focus {
+
             outline: none;
-            box-shadow: 0 0 12px rgba(245,197,24,0.7);
+
+            box-shadow:
+                0 0 15px rgba(245,197,24,0.8);
         }
 
+        /* BUTTONS */
+
         .button-group {
+
             display: flex;
+
             gap: 15px;
+
             margin-top: 18px;
         }
 
-        .search-btn {
+        .search-btn,
+        .logout-btn {
+
             flex: 1;
-            padding: 14px;
+
+            padding: 15px;
+
             border: none;
+
             border-radius: 30px;
-            background: linear-gradient(135deg, #f5c518, #ffd700);
-            color: black;
+
             font-weight: bold;
+
             cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .search-btn {
+
+            background:
+                linear-gradient(135deg,#f5c518,#ffd700);
+
+            color: black;
         }
 
         .logout-btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 30px;
+
             background: crimson;
+
             color: white;
-            font-weight: bold;
-            cursor: pointer;
         }
 
+        .search-btn:hover,
+        .logout-btn:hover {
+
+            transform: scale(1.02);
+        }
+
+        /* SUGGESTIONS */
+
         #suggestions {
+
             position: absolute;
-            top: 65px;
+
+            top: 68px;
+
             width: 100%;
-            background: rgba(0,0,0,0.95);
+
+            background: rgba(0,0,0,0.96);
+
             border-radius: 15px;
+
             overflow: hidden;
+
             display: none;
+
             z-index: 1000;
         }
 
         .suggestion-item {
+
             padding: 14px;
+
             cursor: pointer;
+
+            transition: 0.3s;
         }
 
         .suggestion-item:hover {
+
             background: #f5c518;
+
             color: black;
         }
 
-        #result {
-            margin-top: 30px;
+        /* MOVIE SECTION */
+
+        .movie-section {
+
+            margin-top: 40px;
+        }
+
+        .section-title {
+
+            color: #f5c518;
+
+            font-size: 30px;
+
             margin-bottom: 20px;
         }
 
-        #result h2 {
-            color: #f5c518;
-            font-size: 32px;
+        /* MOVIE GRID */
+
+        .movie-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 25px;
         }
 
+        .movie-card {
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .movie-card:hover {
+
+            transform: translateY(-6px);
+
+            background: rgba(255,255,255,0.12);
+        }
+
+        .movie-banner {
+
+            width: 100%;
+            height: 320px;
+
+            object-fit: cover;
+        }
+
+        .movie-info {
+
+            padding: 18px;
+        }
+
+        .movie-title {
+
+            font-size: 22px;
+
+            color: #f5c518;
+
+            margin-bottom: 8px;
+        }
+
+        .movie-year {
+
+            color: #ccc;
+        }
+
+        /* RESULT */
+
+        #result {
+
+            margin-top: 40px;
+            margin-bottom: 25px;
+        }
+
+        #result h2 {
+
+            color: #f5c518;
+
+            font-size: 36px;
+        }
+
+        /* CAST LIST */
+
         #actorList {
+
             list-style: none;
+
             padding: 0;
         }
 
         .profile-btn {
+
             display: flex;
+
             align-items: center;
+
             gap: 15px;
-            padding: 15px;
+
+            padding: 18px;
+
             margin-bottom: 15px;
+
             background: rgba(255,255,255,0.08);
+
             border-radius: 18px;
+
             cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .profile-btn:hover {
+
+            background: rgba(255,255,255,0.13);
+
+            transform: translateY(-3px);
         }
 
         .avatar {
-            width: 65px;
-            height: 65px;
+
+            width: 70px;
+            height: 70px;
+
             border-radius: 50%;
+
             object-fit: cover;
+
             border: 2px solid #f5c518;
         }
 
         .name {
-            font-size: 18px;
+
+            font-size: 20px;
+
             font-weight: bold;
         }
 
         .role {
+
             color: #ccc;
+
             margin-top: 4px;
         }
 
+        /* PROFILE CARD */
+
         .profile-card {
+
             margin-top: 35px;
+
             background: rgba(255,255,255,0.08);
-            padding: 30px;
-            border-radius: 20px;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
             text-align: center;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.5);
         }
 
         .profile-img {
-            width: 140px;
-            height: 140px;
+
+            width: 150px;
+            height: 150px;
+
             border-radius: 50%;
+
             object-fit: cover;
+
             border: 4px solid #f5c518;
+
             margin-bottom: 20px;
+        }
+
+        .profile-card h2 {
+
+            color: #f5c518;
+
+            margin-bottom: 20px;
+        }
+
+        .profile-card p {
+
+            line-height: 1.8;
+
+            color: #ddd;
+        }
+
+        @media (max-width: 768px) {
+
+            h1 {
+                font-size: 38px;
+            }
+
+            .movie-banner {
+                height: 260px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
         }
 
     </style>
@@ -178,15 +400,21 @@
 <body>
 
 <script>
+
     if (!localStorage.getItem("role")) {
+
         alert("Please login first");
+
         window.location.href = "login.html";
     }
+
 </script>
 
 <div class="container">
 
-    <h1>Movie Cast Viewer</h1>
+    <h1>🎬 Movie Cast Viewer</h1>
+
+    <!-- SEARCH -->
 
     <div id="searchBox">
 
@@ -199,23 +427,48 @@
 
         <div class="button-group">
 
-            <button class="search-btn" onclick="searchMovie()">
+            <button class="search-btn"
+                    onclick="searchMovie()">
+
                 Search
+
             </button>
 
-            <button class="logout-btn" onclick="logout()">
+            <button class="logout-btn"
+                    onclick="logout()">
+
                 Logout
+
             </button>
 
         </div>
 
     </div>
 
-    <hr>
+    <!-- SUGGESTED MOVIES -->
+
+    <div class="movie-section">
+
+        <h2 class="section-title">
+            Suggested Movies
+        </h2>
+
+        <div class="movie-grid"
+             id="movieGrid">
+
+        </div>
+
+    </div>
+
+    <!-- RESULT -->
 
     <div id="result"></div>
 
+    <!-- CAST -->
+
     <ul id="actorList"></ul>
+
+    <!-- PROFILE -->
 
     <div id="profile"></div>
 
@@ -225,151 +478,399 @@
 
     let allMovies = [];
 
-    document.addEventListener("DOMContentLoaded", () => {
-        fetch("/movies/all")
-            .then(res => res.json())
-            .then(data => {
-                allMovies = data;
-            });
-    });
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadMovies
+    );
+
+    async function loadMovies() {
+
+        try {
+
+            const res =
+                await fetch("/movies/all");
+
+            allMovies =
+                await res.json();
+
+            renderSuggestedMovies();
+
+        } catch(error) {
+
+            console.error(error);
+
+            alert("Failed to load movies");
+        }
+    }
+
+    /* LOGOUT */
 
     function logout() {
+
         localStorage.removeItem("role");
+
         alert("Logged out successfully");
+
         window.location.href = "login.html";
     }
 
+    /* RENDER MOVIES */
+
+    function renderSuggestedMovies() {
+
+        const grid =
+            document.getElementById("movieGrid");
+
+        grid.innerHTML = "";
+
+        allMovies.forEach(movie => {
+
+            grid.innerHTML += `
+
+                <div class="movie-card"
+                     onclick="showMovieById('${movie.movieId}')">
+
+                    <img
+                        class="movie-banner"
+
+                        src="${
+                            movie.banner ||
+                            '/images/default-banner.jpg'
+                        }"
+
+                        onerror="
+                            this.src='/images/default-banner.jpg'
+                        "
+
+                        alt="Movie Banner">
+
+                    <div class="movie-info">
+
+                        <div class="movie-title">
+                            ${movie.title}
+                        </div>
+
+                        <div class="movie-year">
+                            ${movie.year || 'N/A'}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+        });
+    }
+
+    /* SEARCH SUGGESTIONS */
+
     function showSuggestions() {
 
-        const keyword = document.getElementById("search").value.toLowerCase();
-        const box = document.getElementById("suggestions");
+        const keyword =
+            document.getElementById("search")
+            .value
+            .toLowerCase();
+
+        const box =
+            document.getElementById("suggestions");
 
         box.innerHTML = "";
 
         if (!keyword) {
+
             box.style.display = "none";
+
             return;
         }
 
-        const filtered = allMovies.filter(movie =>
-            movie.title.toLowerCase().includes(keyword)
-        );
+        const filtered =
+            allMovies.filter(movie =>
+
+                movie.title
+                    .toLowerCase()
+                    .includes(keyword)
+            );
 
         filtered.forEach(movie => {
 
-            const div = document.createElement("div");
-            div.className = "suggestion-item";
-            div.innerText = movie.title;
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "suggestion-item";
+
+            div.innerText =
+                movie.title;
 
             div.onclick = () => {
-                document.getElementById("search").value = movie.title;
+
+                document
+                .getElementById("search")
+                .value = movie.title;
+
                 box.style.display = "none";
+
                 showMovie(movie);
             };
 
             box.appendChild(div);
         });
 
-        box.style.display = filtered.length ? "block" : "none";
+        box.style.display =
+            filtered.length ? "block" : "none";
     }
+
+    /* SEARCH */
 
     function searchMovie() {
 
-        const keyword = document.getElementById("search").value.toLowerCase();
+        const keyword =
+            document.getElementById("search")
+            .value
+            .toLowerCase();
 
-        const movie = allMovies.find(m =>
-            m.title.toLowerCase() === keyword
-        );
+        const movie =
+            allMovies.find(m =>
+
+                m.title.toLowerCase() === keyword
+            );
 
         if (!movie) {
+
             alert("Movie not found");
+
             return;
         }
 
         showMovie(movie);
     }
 
+    /* SHOW MOVIE FROM BANNER CLICK */
+
+    function showMovieById(id) {
+
+        const movie =
+            allMovies.find(m => m.movieId == id);
+
+        if (!movie) {
+
+            alert("Movie not found");
+
+            return;
+        }
+
+        showMovie(movie);
+    }
+
+    /* SHOW MOVIE CAST */
+
     function showMovie(movie) {
 
-        const resultDiv = document.getElementById("result");
-        const actorList = document.getElementById("actorList");
+        console.log(movie);
+
+        const resultDiv =
+            document.getElementById("result");
+
+        const actorList =
+            document.getElementById("actorList");
 
         resultDiv.innerHTML = `
+
             <h2>${movie.title}</h2>
-            <p><b>Cast Members: ${movie.contributors?.length || 0}</b></p>
+
+            <p>
+                <b>
+                    Cast Members:
+                    ${movie.contributors ? movie.contributors.length : 0}
+                </b>
+            </p>
+
         `;
 
         actorList.innerHTML = "";
+
         document.getElementById("profile").innerHTML = "";
 
-        if (!movie.contributors) return;
+        if (
+            !movie.contributors ||
+            movie.contributors.length === 0
+        ) {
+
+            actorList.innerHTML = `
+
+                <p style="
+                    color:#ccc;
+                    margin-top:15px;
+                ">
+                    No contributors found for this movie.
+                </p>
+
+            `;
+
+            return;
+        }
 
         movie.contributors.forEach(c => {
 
-            const li = document.createElement("li");
-            li.className = "profile-btn";
+            const li =
+                document.createElement("li");
+
+            li.className =
+                "profile-btn";
 
             li.innerHTML = `
-                <img src="${c.photo}"
-                     class="avatar"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'">
+
+                <img
+                    src="${
+                        c.photo ||
+                        'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                    }"
+
+                    class="avatar"
+
+                    onerror="
+                        this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                    ">
 
                 <div>
-                    <div class="name">${c.name}</div>
-                    <div class="role">${c.role}</div>
+
+                    <div class="name">
+                        ${c.name || 'Unknown'}
+                    </div>
+
+                    <div class="role">
+                        ${c.role || 'Contributor'}
+                    </div>
+
                 </div>
+
             `;
 
-            li.onclick = () => showProfile(c);
+            li.onclick = () =>
+                showProfile(c);
 
             actorList.appendChild(li);
         });
+
+        window.scrollTo({
+
+            top:
+                resultDiv.offsetTop - 30,
+
+            behavior: "smooth"
+        });
     }
+
+    /* SHOW PROFILE */
 
     function showProfile(c) {
 
         document.getElementById("profile").innerHTML = `
+
             <div class="profile-card">
 
-                <img src="${c.photo}"
-                     class="profile-img"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'">
+                <img
+                    src="${
+                        c.photo ||
+                        'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                    }"
 
-                <h2>${c.name}</h2>
+                    class="profile-img"
 
-                <p><b>Role:</b> ${c.role}</p>
-                <p><b>Country:</b> ${c.country}</p>
+                    onerror="
+                        this.src='https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
+                    ">
 
-                <p><b>Date Of Birth:</b> ${c.dateOfBirth || "Not provided"}</p>
+                <h2>${c.name || 'Unknown'}</h2>
 
-                <p><b>Age:</b> ${
-                    c.dateOfBirth ? calculateAge(c.dateOfBirth) : "N/A"
-                }</p>
+                <p>
+                    <b>Role:</b>
+                    ${c.role || 'N/A'}
+                </p>
 
-                <p><b>Description:</b> ${c.description || "No description available"}</p>
-                <p><b>Awards:</b> ${c.awards || "No awards listed"}</p>
-                <p><b>Notable Works:</b> ${c.notableWorks || "No works listed"}</p>
+                <p>
+                    <b>Country:</b>
+                    ${c.country || 'N/A'}
+                </p>
+
+                <p>
+                    <b>Date Of Birth:</b>
+                    ${c.dateOfBirth || 'Not provided'}
+                </p>
+
+                <p>
+                    <b>Age:</b>
+
+                    ${
+                        c.dateOfBirth
+                        ? calculateAge(c.dateOfBirth)
+                        : 'N/A'
+                    }
+                </p>
+
+                <p>
+                    <b>Description:</b>
+
+                    ${
+                        c.description ||
+                        'No description available'
+                    }
+                </p>
+
+                <p>
+                    <b>Awards:</b>
+
+                    ${
+                        c.awards ||
+                        'No awards listed'
+                    }
+                </p>
+
+                <p>
+                    <b>Notable Works:</b>
+
+                    ${
+                        c.notableWorks ||
+                        'No works listed'
+                    }
+                </p>
 
             </div>
+
         `;
     }
 
-    // ✅ FIXED AGE FUNCTION
+    /* AGE */
+
     function calculateAge(dob) {
 
         if (!dob) return "";
 
-        const birthDate = new Date(dob);
-        const today = new Date();
+        const birthDate =
+            new Date(dob);
 
-        let age = today.getFullYear() - birthDate.getFullYear();
+        const today =
+            new Date();
 
-        const monthDiff = today.getMonth() - birthDate.getMonth();
+        let age =
+            today.getFullYear() -
+            birthDate.getFullYear();
+
+        const monthDiff =
+            today.getMonth() -
+            birthDate.getMonth();
 
         if (
+
             monthDiff < 0 ||
-            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+
+            (
+                monthDiff === 0 &&
+                today.getDate() <
+                birthDate.getDate()
+            )
         ) {
+
             age--;
         }
 

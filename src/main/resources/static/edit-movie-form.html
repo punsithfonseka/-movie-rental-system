@@ -2,146 +2,145 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Edit Movie</title>
 
     <style>
 
         body {
+
             margin: 0;
             padding: 0;
+
             min-height: 100vh;
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             font-family: "Poppins", Arial, sans-serif;
 
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.92)),
-                        url("/images/bg.jpg");
+            background:
+                linear-gradient(rgba(0,0,0,0.75),
+                rgba(0,0,0,0.92)),
+                url("/images/bg.jpg");
+
             background-size: cover;
             background-position: center;
+
             color: white;
         }
 
-        /* CONTAINER */
         .container {
+
             width: 100%;
             max-width: 750px;
+
             background: rgba(20,20,20,0.92);
+
             padding: 40px;
+
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
         }
 
-        /* TITLE */
-        h1 {
-            text-align: center;
-            color: #f5c518;
-            font-size: 38px;
-        }
+        input,
+        select {
 
-        p {
-            text-align: center;
-            color: #ccc;
-        }
-
-        /* LABEL */
-        label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            color: #f5c518;
-            font-weight: 600;
-        }
-
-        /* INPUTS */
-        input, select {
             width: 100%;
-            padding: 14px;
-            border-radius: 16px;
-            border: none;
-            background: rgba(255,255,255,0.08);
-            color: white;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
 
-        input:focus, select:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(245,197,24,0.5);
+            padding: 14px;
+
+            border: none;
+            border-radius: 16px;
+
+            margin-top: 10px;
+
+            background: rgba(255,255,255,0.08);
+
+            color: white;
         }
 
         select[multiple] {
             height: 160px;
         }
 
-        /* BUTTONS */
-        button {
+        .preview {
+
             width: 100%;
-            padding: 14px;
+            height: 220px;
+
+            object-fit: cover;
+
             border-radius: 18px;
+
+            margin-top: 15px;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 15px;
+
             border: none;
+            border-radius: 18px;
+
             font-weight: bold;
+
             cursor: pointer;
-            margin-top: 12px;
         }
 
         .update-btn {
-            background: linear-gradient(135deg,#f5c518,#ffd84d);
+
+            background:
+                linear-gradient(135deg,#f5c518,#ffd84d);
+
             color: black;
         }
 
-        .delete-btn {
-            background: crimson;
-            color: white;
-        }
+        .back-btn {
 
-        /* NAV */
-        .nav {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .nav button {
             background: rgba(255,255,255,0.08);
+
             color: white;
         }
 
-        .nav button:hover {
+        .back-btn:hover {
+
             background: rgba(255,255,255,0.15);
         }
 
-        /* RESULT */
-        #result {
-            margin-top: 15px;
-            text-align: center;
-            color: lightgreen;
-        }
-
     </style>
+
 </head>
 
 <body>
 
-<script>
-    if (localStorage.getItem("role") !== "ADMIN") {
-        alert("Admins only");
-        window.location.href = "login.html";
-    }
-</script>
-
 <div class="container">
 
     <h1>🎬 Edit Movie</h1>
-    <p>Update movie details</p>
 
     <label>Title</label>
     <input type="text" id="title">
 
-    <label>Release Year</label>
+    <label>Year</label>
     <input type="number" id="year">
+
+    <label>Movie Banner</label>
+
+    <input type="file"
+           id="bannerFile"
+           accept="image/*">
+
+    <img id="preview"
+         class="preview">
 
     <label>Actors</label>
     <select id="actors" multiple></select>
@@ -149,13 +148,19 @@
     <label>Director</label>
     <select id="director"></select>
 
-    <button class="update-btn" onclick="updateMovie()">Update Movie</button>
-    <button class="delete-btn" onclick="deleteMovie()">Delete Movie</button>
+    <button class="update-btn"
+            onclick="updateMovie()">
 
-    <div class="nav">
-        <button onclick="goBack()">⬅ Back</button>
-        <button onclick="goNext()">Contributors ➡</button>
-    </div>
+        Update Movie
+
+    </button>
+
+    <button class="back-btn"
+            onclick="goBack()">
+
+        ⬅ Back
+
+    </button>
 
     <div id="result"></div>
 
@@ -163,138 +168,221 @@
 
 <script>
 
-    const params = new URLSearchParams(window.location.search);
-    const movieId = params.get("id");
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const movieId =
+        params.get("id");
 
     let allContributors = [];
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    let currentBanner = "";
 
-        if (!movieId) {
-            document.getElementById("result").innerText = "Movie ID missing";
-            return;
-        }
+    document
+    .getElementById("bannerFile")
+    .addEventListener("change", function(e) {
 
-        await loadContributors();
-        await loadMovie();
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            currentBanner = event.target.result;
+
+            document
+            .getElementById("preview")
+            .src = currentBanner;
+        };
+
+        reader.readAsDataURL(file);
     });
 
-    /* CONTRIBUTORS */
+    document
+    .addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            await loadContributors();
+
+            await loadMovie();
+        }
+    );
+
     async function loadContributors() {
 
-        const res = await fetch("/contributors/all");
-        allContributors = await res.json();
+        const res =
+            await fetch("/contributors/all");
 
-        const actorSelect = document.getElementById("actors");
-        const directorSelect = document.getElementById("director");
+        allContributors =
+            await res.json();
 
-        actorSelect.innerHTML = "";
-        directorSelect.innerHTML = `<option value="">Select Director</option>`;
+        const actorSelect =
+            document.getElementById("actors");
+
+        const directorSelect =
+            document.getElementById("director");
 
         allContributors.forEach(c => {
 
             if (c.role === "Actor") {
-                actorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+                actorSelect.innerHTML += `
+                    <option value="${c.id}">
+                        ${c.name}
+                    </option>
+                `;
             }
 
             if (c.role === "Director") {
-                directorSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+                directorSelect.innerHTML += `
+                    <option value="${c.id}">
+                        ${c.name}
+                    </option>
+                `;
             }
         });
     }
 
-    /* LOAD MOVIE */
     async function loadMovie() {
 
-        const res = await fetch("/movies/all");
-        const movies = await res.json();
+        const res =
+            await fetch("/movies/all");
 
-        const movie = movies.find(m => m.movieId == movieId);
+        const movies =
+            await res.json();
 
-        if (!movie) {
-            document.getElementById("result").innerText = "Movie not found";
-            return;
-        }
+        const movie =
+            movies.find(
+                m => m.movieId == movieId
+            );
 
-        document.getElementById("title").value = movie.title;
-        document.getElementById("year").value = movie.year;
+        document
+        .getElementById("title")
+        .value = movie.title;
 
-        const actorSelect = document.getElementById("actors");
-        const directorSelect = document.getElementById("director");
+        document
+        .getElementById("year")
+        .value = movie.year;
 
-        [...actorSelect.options].forEach(o => o.selected = false);
-        directorSelect.value = "";
+        currentBanner =
+            movie.banner;
 
-        movie.contributors?.forEach(c => {
+        document
+        .getElementById("preview")
+        .src = currentBanner;
 
-            const found = allContributors.find(x => String(x.id) === String(c.id));
+        movie.contributors.forEach(c => {
+
+            const found =
+                allContributors.find(
+                    x => x.id == c.id
+                );
+
             if (!found) return;
 
             if (found.role === "Director") {
-                directorSelect.value = found.id;
+
+                document
+                .getElementById("director")
+                .value = found.id;
             }
 
             if (found.role === "Actor") {
-                const opt = actorSelect.querySelector(`option[value="${found.id}"]`);
-                if (opt) opt.selected = true;
+
+                const option =
+                    document.querySelector(
+                        `#actors option[value="${found.id}"]`
+                    );
+
+                if (option)
+                    option.selected = true;
             }
         });
     }
 
-    /* UPDATE */
     async function updateMovie() {
 
-        const title = document.getElementById("title").value.trim();
-        const year = parseInt(document.getElementById("year").value);
+        const title =
+            document
+            .getElementById("title")
+            .value;
 
-        const actorSelect = document.getElementById("actors");
-        const directorId = document.getElementById("director").value;
+        const year =
+            document
+            .getElementById("year")
+            .value;
 
-        let contributors = Array.from(actorSelect.selectedOptions)
-            .map(o => ({ id: o.value }));
+        const actorSelect =
+            document
+            .getElementById("actors");
 
-        if (directorId) contributors.push({ id: directorId });
+        const directorId =
+            document
+            .getElementById("director")
+            .value;
 
-        if (!title || !year) {
-            document.getElementById("result").innerText = "Fill required fields";
-            return;
+        const contributors =
+            Array.from(
+                actorSelect.selectedOptions
+            )
+
+            .map(o => ({
+                id: o.value
+            }));
+
+        if (directorId) {
+
+            contributors.push({
+                id: directorId
+            });
         }
 
         const updatedMovie = {
+
             movieId,
+
             title,
+
             year,
+
+            banner: currentBanner,
+
             contributors
         };
 
-        const res = await fetch(`/movies/update/${movieId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedMovie)
-        });
+        const res =
+            await fetch(
+                "/movies/update/" + movieId,
+                {
 
-        document.getElementById("result").innerText = await res.text();
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            updatedMovie
+                        )
+                }
+            );
+
+        document
+        .getElementById("result")
+        .innerText =
+            await res.text();
     }
 
-    /* DELETE */
-    async function deleteMovie() {
-
-        if (!confirm("Delete this movie?")) return;
-
-        await fetch(`/movies/delete/${movieId}`, {
-            method: "DELETE"
-        });
-
-        window.location.href = "edit-movie.html";
-    }
-
-    /* NAV */
     function goBack() {
-        window.location.href = "edit-movie.html";
-    }
 
-    function goNext() {
-        window.location.href = "contributors.html";
+        window.location.href =
+            "edit-movie.html";
     }
 
 </script>

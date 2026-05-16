@@ -14,10 +14,15 @@
 
   <style>
 
+    /* ================================================= */
+    /* BODY */
+    /* ================================================= */
+
     body {
 
         margin: 0;
         padding: 0;
+
         min-height: 100vh;
 
         display: flex;
@@ -27,8 +32,10 @@
         font-family: "Poppins", Arial, sans-serif;
 
         background:
-            linear-gradient(rgba(0,0,0,0.75),
-            rgba(0,0,0,0.92)),
+            linear-gradient(
+                rgba(0,0,0,0.75),
+                rgba(0,0,0,0.92)
+            ),
             url("/images/bg.jpg");
 
         background-size: cover;
@@ -37,60 +44,87 @@
         color: white;
     }
 
+    /* ================================================= */
+    /* CONTAINER */
+    /* ================================================= */
+
     .container {
 
         width: 100%;
-        max-width: 700px;
+        max-width: 720px;
 
         background: rgba(20,20,20,0.92);
-        backdrop-filter: blur(10px);
 
         border-radius: 24px;
+
         padding: 40px;
 
-        box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+        box-shadow:
+            0 10px 40px rgba(0,0,0,0.7);
 
         margin: 20px;
     }
 
+    /* ================================================= */
+    /* TITLE */
+    /* ================================================= */
+
     h1 {
 
         text-align: center;
+
         color: #f5c518;
+
         margin-bottom: 8px;
+
         font-size: 40px;
     }
 
     p {
 
         text-align: center;
+
         color: #ccc;
+
         margin-bottom: 30px;
     }
+
+    /* ================================================= */
+    /* LABELS */
+    /* ================================================= */
 
     label {
 
         display: block;
+
         margin-top: 18px;
         margin-bottom: 8px;
 
         color: #f5c518;
+
         font-weight: 600;
     }
+
+    /* ================================================= */
+    /* INPUTS */
+    /* ================================================= */
 
     input,
     select {
 
         width: 100%;
+
         padding: 14px 16px;
 
         border: none;
         border-radius: 16px;
 
         background: rgba(255,255,255,0.08);
+
         color: white;
 
         font-size: 15px;
+
         box-sizing: border-box;
 
         transition: 0.3s;
@@ -100,23 +134,54 @@
     select:focus {
 
         outline: none;
+
         background: rgba(255,255,255,0.12);
 
-        box-shadow: 0 0 10px rgba(245,197,24,0.5);
+        box-shadow:
+            0 0 10px rgba(245,197,24,0.5);
     }
 
     select[multiple] {
+
         height: 160px;
     }
 
     option {
+
         background: #111;
         color: white;
     }
 
+    /* ================================================= */
+    /* IMAGE PREVIEW */
+    /* ================================================= */
+
+    .preview {
+
+        width: 100%;
+        height: 240px;
+
+        object-fit: cover;
+
+        border-radius: 18px;
+
+        margin-top: 15px;
+
+        border:
+            2px solid rgba(255,255,255,0.1);
+
+        box-shadow:
+            0 5px 20px rgba(0,0,0,0.4);
+    }
+
+    /* ================================================= */
+    /* BUTTONS */
+    /* ================================================= */
+
     button {
 
         width: 100%;
+
         padding: 14px;
 
         border: none;
@@ -126,36 +191,57 @@
         font-weight: bold;
 
         cursor: pointer;
+
         transition: 0.3s;
 
         margin-top: 15px;
     }
 
+    /* ADD BUTTON */
+
     .add-btn {
 
-        background: linear-gradient(135deg,#f5c518,#ffd84d);
+        background:
+            linear-gradient(
+                135deg,
+                #f5c518,
+                #ffd84d
+            );
+
         color: black;
     }
 
     .add-btn:hover {
+
         transform: translateY(-2px);
+
         background: white;
     }
+
+    /* LOGOUT BUTTON */
 
     .logout-btn {
 
         background: crimson;
+
         color: white;
     }
 
     .logout-btn:hover {
+
         transform: translateY(-2px);
+
         background: red;
     }
+
+    /* ================================================= */
+    /* NAV BUTTONS */
+    /* ================================================= */
 
     .nav-buttons {
 
         display: flex;
+
         gap: 15px;
 
         margin-top: 25px;
@@ -164,34 +250,50 @@
     .nav-buttons button {
 
         margin-top: 0;
+
         background: rgba(255,255,255,0.08);
+
         color: white;
     }
 
     .nav-buttons button:hover {
+
         background: rgba(255,255,255,0.15);
     }
+
+    /* ================================================= */
+    /* RESULT */
+    /* ================================================= */
 
     #result {
 
         margin-top: 20px;
+
         text-align: center;
 
-        color: #ffb3b3;
+        color: lightgreen;
+
         font-weight: bold;
     }
+
+    /* ================================================= */
+    /* RESPONSIVE */
+    /* ================================================= */
 
     @media (max-width: 768px) {
 
         .container {
+
             padding: 25px;
         }
 
         h1 {
+
             font-size: 32px;
         }
 
         .nav-buttons {
+
             flex-direction: column;
         }
     }
@@ -204,46 +306,102 @@
 
 <script>
 
-  if (localStorage.getItem("role") !== "ADMIN") {
+  if (
+      localStorage.getItem("role")
+      !== "ADMIN"
+  ) {
+
       alert("Admins only");
-      window.location.href = "login.html";
+
+      window.location.href =
+          "login.html";
   }
 
 </script>
 
 <div class="container">
 
-  <h1>Add Movie</h1>
-  <p>Admin only</p>
+  <h1>🎬 Add Movie</h1>
 
-  <label>Title</label>
-  <input type="text" id="title" placeholder="Inception">
+  <p>Admin Only Panel</p>
 
-  <label>Actors (Hold Ctrl to select multiple)</label>
+  <!-- TITLE -->
+
+  <label>Movie Title</label>
+
+  <input
+          type="text"
+          id="title"
+          placeholder="Inception">
+
+  <!-- BANNER -->
+
+  <label>Movie Banner</label>
+
+  <input
+          type="file"
+          id="bannerFile"
+          accept="image/*">
+
+  <img
+          id="preview"
+          class="preview"
+          src="/images/default-banner.jpg">
+
+  <!-- ACTORS -->
+
+  <label>
+    Actors
+    (Hold Ctrl to select multiple)
+  </label>
+
   <select id="actors" multiple></select>
 
+  <!-- DIRECTOR -->
+
   <label>Director</label>
+
   <select id="director"></select>
 
-  <button class="add-btn" onclick="addMovie()">
+  <!-- ADD BUTTON -->
+
+  <button
+          class="add-btn"
+          onclick="addMovie()">
+
     Add Movie
+
   </button>
 
-  <button class="logout-btn" onclick="logout()">
+  <!-- LOGOUT -->
+
+  <button
+          class="logout-btn"
+          onclick="logout()">
+
     Logout
+
   </button>
+
+  <!-- NAVIGATION -->
 
   <div class="nav-buttons">
 
     <button onclick="goBack()">
+
       ⬅ Back
+
     </button>
 
     <button onclick="goNext()">
+
       Next ➡
+
     </button>
 
   </div>
+
+  <!-- RESULT -->
 
   <div id="result"></div>
 
@@ -251,108 +409,253 @@
 
 <script>
 
+  /* ================================================= */
+  /* NAVIGATION */
+  /* ================================================= */
+
   function goBack() {
-      window.location.href = "/add-contributor.html";
+
+      window.location.href =
+          "/add-contributor.html";
   }
 
   function goNext() {
-      window.location.href = "/edit-movie.html";
+
+      window.location.href =
+          "/edit-movie.html";
   }
 
-  document.addEventListener("DOMContentLoaded", loadContributors);
+  /* ================================================= */
+  /* IMAGE HANDLING */
+  /* ================================================= */
+
+  let bannerBase64 = "";
+
+  document
+  .getElementById("bannerFile")
+
+  .addEventListener(
+      "change",
+      function(e) {
+
+          const file =
+              e.target.files[0];
+
+          if (!file) return;
+
+          const reader =
+              new FileReader();
+
+          reader.onload =
+              function(event) {
+
+                  bannerBase64 =
+                      event.target.result;
+
+                  document
+                  .getElementById("preview")
+                  .src = bannerBase64;
+              };
+
+          reader.readAsDataURL(file);
+      }
+  );
+
+  /* ================================================= */
+  /* LOAD CONTRIBUTORS */
+  /* ================================================= */
+
+  document
+  .addEventListener(
+      "DOMContentLoaded",
+      loadContributors
+  );
 
   function loadContributors() {
 
       fetch("/contributors/all")
-          .then(res => res.json())
-          .then(data => {
 
-              const actorSelect =
-                  document.getElementById("actors");
+      .then(res => res.json())
 
-              const directorSelect =
-                  document.getElementById("director");
+      .then(data => {
 
-              actorSelect.innerHTML = "";
-              directorSelect.innerHTML = "";
+          const actorSelect =
+              document.getElementById(
+                  "actors"
+              );
 
-              data.forEach(c => {
+          const directorSelect =
+              document.getElementById(
+                  "director"
+              );
 
-                  if (c.role === "Actor") {
-                      actorSelect.innerHTML += `
-                          <option value="${c.id}">
-                              ${c.name}
-                          </option>
-                      `;
-                  }
+          actorSelect.innerHTML = "";
 
-                  if (c.role === "Director") {
-                      directorSelect.innerHTML += `
-                          <option value="${c.id}">
-                              ${c.name}
-                          </option>
-                      `;
-                  }
-              });
+          directorSelect.innerHTML = `
+              <option value="">
+                  Select Director
+              </option>
+          `;
+
+          data.forEach(c => {
+
+              if (c.role === "Actor") {
+
+                  actorSelect.innerHTML += `
+                      <option value="${c.id}">
+                          ${c.name}
+                      </option>
+                  `;
+              }
+
+              if (c.role === "Director") {
+
+                  directorSelect.innerHTML += `
+                      <option value="${c.id}">
+                          ${c.name}
+                      </option>
+                  `;
+              }
           });
+      });
   }
+
+  /* ================================================= */
+  /* ADD MOVIE */
+  /* ================================================= */
 
   function addMovie() {
 
       const title =
-          document.getElementById("title").value.trim();
+          document
+          .getElementById("title")
+          .value
+          .trim();
 
       const actorSelect =
-          document.getElementById("actors");
+          document
+          .getElementById("actors");
 
       const directorId =
-          document.getElementById("director").value;
+          document
+          .getElementById("director")
+          .value;
 
       const contributors =
-          Array.from(actorSelect.selectedOptions)
-          .map(opt => ({ id: opt.value }));
+
+          Array.from(
+              actorSelect.selectedOptions
+          )
+
+          .map(opt => ({
+              id: opt.value
+          }));
 
       if (directorId) {
-          contributors.push({ id: directorId });
+
+          contributors.push({
+              id: directorId
+          });
       }
 
-      if (!title || contributors.length === 0) {
+      /* VALIDATION */
 
-          document.getElementById("result").innerText =
+      if (
+          !title ||
+          contributors.length === 0
+      ) {
+
+          document
+          .getElementById("result")
+          .innerText =
               "Please fill all fields";
 
           return;
       }
 
+      /* MOVIE OBJECT */
+
       const movie = {
 
-          movieId: "M" + Math.floor(Math.random() * 1000),
+          movieId:
+              "M" +
+              Math.floor(
+                  Math.random() * 100000
+              ),
+
           title: title,
+
           year: 2024,
+
+          banner: bannerBase64,
+
           contributors: contributors
       };
 
+      /* SEND TO BACKEND */
+
       fetch("/movies/add", {
+
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(movie)
+
+          headers: {
+              "Content-Type":
+              "application/json"
+          },
+
+          body:
+              JSON.stringify(movie)
       })
 
       .then(res => res.text())
+
       .then(data => {
 
-          document.getElementById("result").innerText = data;
+          document
+          .getElementById("result")
+          .innerText = data;
 
-          document.getElementById("title").value = "";
+          /* RESET */
+
+          document
+          .getElementById("title")
+          .value = "";
+
+          document
+          .getElementById("preview")
+          .src =
+              "/images/default-banner.jpg";
+
+          bannerBase64 = "";
 
           actorSelect.selectedIndex = -1;
-          document.getElementById("director").selectedIndex = 0;
+
+          document
+          .getElementById("director")
+          .selectedIndex = 0;
+      })
+
+      .catch(error => {
+
+          console.error(error);
+
+          document
+          .getElementById("result")
+          .innerText =
+              "Failed to add movie";
       });
   }
 
+  /* ================================================= */
+  /* LOGOUT */
+  /* ================================================= */
+
   function logout() {
+
       localStorage.clear();
-      window.location.href = "login.html";
+
+      window.location.href =
+          "login.html";
   }
 
 </script>
